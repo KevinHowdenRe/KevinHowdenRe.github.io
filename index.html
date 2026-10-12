@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+          content="HAL - Howden Analytic Lab">
+
+    <title>HAL</title>
+
+    <!-- Core CSS -->
+	<link rel="stylesheet" href="css/base.css">
+    
+
+    
+</head>
+
+
+<body>
+
+<div class="app">
+
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header class="header">
+
+        <a href="index.html"
+           class="header-brand">
+            HAL
+        </a>
+
+
+        <nav class="header-nav">
+
+            <a href="index.html" class="active">
+                Home
+            </a>
+			
+			<a href="pages/dashboard.html" class="active">
+                Articles
+            </a>
+
+          
+            <a href="pages/blog.html" class="active">
+                Documentation
+            </a>
+                
+            <a href="pages/portfolio.html" class="active">
+                Solutions
+            </a>
+			
+			
+			<a href="pages/login.html" class="active">
+                 Login
+            </a>
+			
+			<button onclick="switchLight()" id="interrupteur" class="theme-toggle" id="theme-toggle" aria-label="Switch theme">
+    ☾ 
+</button>
+
+
+        </nav>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         MAIN
+         ===================================================== -->
+
+    <main class="page">
+
+
+        <!-- =================================================
+             HERO
+             ================================================= -->
+
+        <section style="
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+        ">
+
+            <div style="max-width: 760px;">
+
+                <span class="badge mb-4">
+                    Sandbox
+                </span>
+
+                <h1>
+                    Agile solutions<br>
+                    Fast iterations.
+                </h1>
+
+                <p class="page-description"
+                   style="
+                       font-size: 1.125rem;
+                       max-width: 650px;
+                       margin-top: 20px;
+                   ">
+
+                    Dedicated solutions delivered with no cloud-dependencies for most of them ensuring complete data protection by design.
+					Complete ownership on our end enables fast iterations and highly customized solutions.
+                </p>
+
+
+             
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             PRINCIPLES
+             ================================================= -->
+
+        <section>
+
+            <div class="page-header">
+
+                <div>
+
+                    <h2 class="page-title">
+                        Simply efficient.
+                    </h2>
+
+                    <p class="page-description">
+                        Designed specifically for your needs while taking in account insights and market innovations.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="grid grid-3">
+
+
+                <article class="card">
+
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            Responsive
+                        </h3>
+                    </div>
+
+                    <p class="text-secondary mb-0">
+                        A single interface foundation for desktop,
+                        tablet and mobile.
+                    </p>
+
+                </article>
+
+
+                <article class="card">
+
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            Lightweight
+                        </h3>
+                    </div>
+
+                    <p class="text-secondary mb-0">
+                        HTML, CSS and vanilla JavaScript with minimal
+                        dependencies.
+                    </p>
+
+                </article>
+
+
+                <article class="card">
+
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            Extensible
+                        </h3>
+                    </div>
+
+                    <p class="text-secondary mb-0">
+                        Keep the core stable and extend each project
+                        through app.css and app.js.
+                    </p>
+
+                </article>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             DEMOS
+             ================================================= -->
+
+        <section id="demos"
+                 style="margin-top: 80px;">
+
+            <div class="page-header">
+
+                <div>
+
+                    <h2 class="page-title">
+                        Request & Inquiries
+                    </h2>
+
+                    <p class="page-description">
+                        Reach out our team for any inquiries.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="grid grid-3">
+
+
+                <!-- DASHBOARD -->
+
+                <article class="card">
+
+                    <div class="card-header">
+                        <span class="badge">
+                            Data
+                        </span>
+                    </div>
+
+                    <h3>
+                        Dashboard
+                    </h3>
+
+                    <p class="text-secondary">
+                        Dense application interface with KPIs,
+                        charts, tables and controls.
+                    </p>
+
+                    <a href="pages/dashboard.html">
+
+                        Open dashboard
+
+                    </a>
+
+                </article>
+
+
+
+                <!-- BLOG -->
+
+                <article class="card">
+
+                    <div class="card-header">
+                        <span class="badge">
+                            Editorial
+                        </span>
+                    </div>
+
+                    <h3>
+                        Blog
+                    </h3>
+
+                    <p class="text-secondary">
+                        Typography-focused layout for articles,
+                        research notes and long-form content.
+                    </p>
+
+                    <a href="pages/blog.html">
+
+                        Open blog
+
+                    </a>
+
+                </article>
+
+
+
+                <!-- PORTFOLIO -->
+
+                <article class="card">
+
+                    <div class="card-header">
+                        <span class="badge">
+                            Visual
+                        </span>
+                    </div>
+
+                    <h3>
+                        Portfolio
+                    </h3>
+
+                    <p class="text-secondary">
+                        Flexible visual interface suitable for
+                        projects, imagery, maps and 3D experiences.
+                    </p>
+
+                    <a href="pages/portfolio.html">
+
+                        Open portfolio
+
+                    </a>
+
+                </article>
+
+
+
+                <!-- LOGIN -->
+
+                <article class="card">
+
+                    <div class="card-header">
+                        <span class="badge">
+                            Authentication
+                        </span>
+                    </div>
+
+                    <h3>
+                        Login
+                    </h3>
+
+                    <p class="text-secondary">
+                        Minimal authentication screen demonstrating
+                        forms and responsive mobile behaviour.
+                    </p>
+
+                    <a href="pages/login.html">
+
+                        Open login
+
+                    </a>
+
+                </article>
+
+
+
+                <!-- ACCOUNT -->
+
+                <article class="card">
+
+                    <div class="card-header">
+                        <span class="badge">
+                            Application
+                        </span>
+                    </div>
+
+                    <h3>
+                        Account
+                    </h3>
+
+                    <p class="text-secondary">
+                        Settings interface combining forms,
+                        navigation and account information.
+                    </p>
+
+                    <a href="pages/account.html">
+
+                        Open account
+
+                    </a>
+
+                </article>
+
+
+            </div>
+
+        </section>
+
+
+
+
+
+        <!-- =================================================
+             FOOTER
+             ================================================= -->
+
+        <footer style="
+            margin-top: 100px;
+            padding: 32px 0;
+            border-top: 1px solid var(--color-border);
+        ">
+
+            <div class="flex justify-between items-center gap-4"
+                 style="flex-wrap: wrap;">
+
+                <div>
+
+                    <strong>
+                        Base UI
+                    </strong>
+
+                    <div class="text-small text-secondary">
+                        HTML · CSS · JavaScript
+                    </div>
+
+                </div>
+
+
+                <div class="text-small text-secondary">
+                    Built as a reusable foundation.
+                </div>
+
+            </div>
+
+        </footer>
+
+
+    </main>
+
+</div>
+
+
+<!-- Core JS -->
+<script src="js/base.js"></script>
+<!-- Analytics -->
+<script src="js/analytics.js"></script>
+
+</body>
+</html>
