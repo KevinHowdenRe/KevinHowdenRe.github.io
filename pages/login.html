@@ -98,7 +98,7 @@
             </div>
 
 
-            <form>
+            <form id="login-form">
 
                 <div class="form-group">
 
@@ -141,11 +141,22 @@
 
 
                 <button
-                    type="button"
-                    class="btn btn-primary w-full"
-                    style="margin-top: 8px;">
-                    Sign in
-                </button>
+					type="submit"
+					class="btn btn-primary w-full"
+					style="margin-top: 8px;"
+				>
+					Sign in
+				</button>
+				
+				<p
+				id="login-error"
+				class="text-small"
+				style="
+					display: none;
+					color: #c0392b;
+					margin-top: 12px;
+				"
+			></p>
 
             </form>
 

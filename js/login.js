@@ -1,9 +1,7 @@
 const API_URL = "https://hrf.pythonanywhere.com";
 
 
-document
-    .getElementById("login-form")
-    .addEventListener("submit", login);
+document.getElementById("login-form").addEventListener("submit", login);
 
 
 async function login(event) {
