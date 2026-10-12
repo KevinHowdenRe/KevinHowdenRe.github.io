@@ -81,7 +81,7 @@ async function login(event) {
         // REDIRECT
         // ---------------------------------------------
 
-        window.location.href = "pages/account.html";
+        window.location.href = "account.html";
 
     }
 
