@@ -61,7 +61,7 @@ async function login(event) {
     }
 
     catch (error) {
-
+		  console.error("LOGIN ERROR:", error);
         errorElement.textContent =
             "Unable to connect to the server.";
 

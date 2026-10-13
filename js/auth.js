@@ -58,7 +58,10 @@ const auth = (() => {
         if (token) {
             headers.set("Authorization", `Bearer ${token}`);
         }
-
+		console.log(
+			"AUTH FETCH:",
+			AUTH_CONFIG.apiBaseUrl + path
+		);
         const response = await fetch(
             AUTH_CONFIG.apiBaseUrl + path,
             {
@@ -66,7 +69,10 @@ const auth = (() => {
                 headers
             }
         );
-
+		console.log(
+			"AUTH RESPONSE:",
+			response.status
+		);
         let data = null;
 
         try {
