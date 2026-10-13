@@ -102,6 +102,7 @@ const auth = (() => {
                 })
             }
         );
+		console.log(result);
 
         if (!result.response.ok || !result.data.ok) {
             return {
