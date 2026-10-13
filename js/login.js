@@ -1,4 +1,4 @@
-document.getElementById("login-form")addEventListener("submit", login);
+document.getElementById("login-form").addEventListener("submit", login);
 
 
 async function login(event) {
