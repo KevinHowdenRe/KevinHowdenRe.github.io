@@ -1,7 +1,4 @@
-const API_URL = "https://hrf.pythonanywhere.com";
-
-
-document.getElementById("login-form").addEventListener("submit", login);
+document.getElementById("login-form")addEventListener("submit", login);
 
 
 async function login(event) {
@@ -25,27 +22,14 @@ async function login(event) {
 
     try {
 
-        const response = await fetch(
-            API_URL + "/api/auth/login",
-            {
-                method: "POST",
-
-                headers: {
-                    "Content-Type": "application/json"
-                },
-
-                body: JSON.stringify({
-                    email: email,
-                    password: password
-                })
-            }
+        // Login + stockage du token + récupération /me
+        const result = await auth.login(
+            email,
+            password
         );
 
 
-        const data = await response.json();
-
-
-        if (!response.ok || !data.ok) {
+        if (!result.ok) {
 
             errorElement.textContent =
                 "Invalid email or password.";
@@ -56,31 +40,22 @@ async function login(event) {
         }
 
 
-        // ---------------------------------------------
-        // SAVE BACKEND SESSION
-        // ---------------------------------------------
+        // État retourné par le serveur
+        const state = result.state;
 
-        localStorage.setItem(
-            "auth_token",
-            data.token
+        console.log("User:", state.user);
+        console.log("Memberships:", state.memberships);
+        console.log("Active audience:", state.activeAudience);
+
+
+        // Le token est déjà stocké dans sessionStorage
+        console.log(
+            "Token:",
+            auth.getToken()
         );
 
 
-        // ---------------------------------------------
-        // ANALYTICS
-        // ---------------------------------------------
-
-        if (window.analytics) {
-
-            analytics.track("login");
-
-        }
-
-
-        // ---------------------------------------------
-        // REDIRECT
-        // ---------------------------------------------
-
+        // Redirection
         window.location.href = "account.html";
 
     }
