@@ -58,10 +58,6 @@ const auth = (() => {
         if (token) {
             headers.set("Authorization", `Bearer ${token}`);
         }
-		console.log(
-			"AUTH FETCH:",
-			AUTH_CONFIG.apiBaseUrl + path
-		);
         const response = await fetch(
             AUTH_CONFIG.apiBaseUrl + path,
             {
@@ -69,10 +65,6 @@ const auth = (() => {
                 headers
             }
         );
-		console.log(
-			"AUTH RESPONSE:",
-			response.status
-		);
         let data = null;
 
         try {
@@ -108,7 +100,6 @@ const auth = (() => {
                 })
             }
         );
-		console.log(result);
 
         if (!result.response.ok || !result.data.ok) {
             return {
@@ -225,7 +216,7 @@ const auth = (() => {
                 memberships: Array.isArray(result.data.memberships)
                     ? result.data.memberships
                     : [],
-                activeAudience: result.data.active_audience || null
+                activeAudience: result.data.memberships[0]["audience"] || null
             };
 
             return getState();

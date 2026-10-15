@@ -27,8 +27,6 @@ async function login(event) {
             email,
             password
         );
-
-		console.log(result);
         if (!result.ok) {
 
             errorElement.textContent =
