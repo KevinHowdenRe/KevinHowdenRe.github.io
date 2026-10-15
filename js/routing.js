@@ -18,9 +18,9 @@ function update_audience(state){
 	}
 }
 
-if (state=== null){
+if (getState()=== null){
 	
 }
 else{
-	update_audience(state);
+	update_audience(getState());
 }

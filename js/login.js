@@ -1,4 +1,4 @@
-let state = null;
+
 
 document.getElementById("login-form").addEventListener("submit", login);
 
@@ -42,7 +42,9 @@ async function login(event) {
 
         // État retourné par le serveur
         
-		state = result.state;
+		setState(result.state);
+		
+		const state = getState();
 
         console.log("User:", state.user);
         console.log("Memberships:", state.memberships);

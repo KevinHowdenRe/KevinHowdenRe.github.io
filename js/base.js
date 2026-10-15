@@ -375,6 +375,22 @@ function switchLight() {
 }
 
 
+/* ---------------------------------------------------------
+   Session Authentification
+   --------------------------------------------------------- */
+
+
+function setState(value) {
+    localStorage.setItem("state", value);
+}
+
+function getState() {
+    return localStorage.getItem("state");
+}
+
+function clearState() {
+    localStorage.removeItem("state");
+}
 
 
 /* ---------------------------------------------------------
