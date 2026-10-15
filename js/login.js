@@ -57,9 +57,9 @@ async function login(event) {
             auth.getToken()
         );
 
-
+		console.log(state);
         // Redirection
-        window.location.href = "../index.html";
+        //window.location.href = "../index.html";
 		//update_audience(state);
 
     }
