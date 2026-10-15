@@ -18,9 +18,11 @@ function update_audience(state){
 	}
 }
 
-if (getState()=== null){
+let state = getState();
+console.log(state);
+if (state=== null){
 	
 }
 else{
-	update_audience(getState());
+	update_audience(state);
 }
