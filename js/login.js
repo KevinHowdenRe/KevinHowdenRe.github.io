@@ -1,4 +1,4 @@
-const state = null;
+let state = null;
 
 document.getElementById("login-form").addEventListener("submit", login);
 
