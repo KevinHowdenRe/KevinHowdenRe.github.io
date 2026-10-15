@@ -1,3 +1,5 @@
+const state = null;
+
 document.getElementById("login-form").addEventListener("submit", login);
 
 
@@ -39,7 +41,8 @@ async function login(event) {
 
 
         // État retourné par le serveur
-        const state = result.state;
+        
+		state = result.state;
 
         console.log("User:", state.user);
         console.log("Memberships:", state.memberships);
@@ -54,7 +57,8 @@ async function login(event) {
 
 
         // Redirection
-        //window.location.href = "account.html";
+        window.location.href = "../index.html";
+		update_audience(state);
 
     }
 
