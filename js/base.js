@@ -381,15 +381,15 @@ function switchLight() {
 
 
 function setState(value) {
-    localStorage.setItem("state", value);
+    sessionStorage.setItem("state", value);
 }
 
 function getState() {
-    return localStorage.getItem("state");
+    return sessionStorage.getItem("state");
 }
 
 function clearState() {
-    localStorage.removeItem("state");
+    sessionStorage.removeItem("state");
 }
 
 

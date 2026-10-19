@@ -304,15 +304,6 @@ const auth = (() => {
         };
     }
 
-    function getState() {
-        return {
-            ready: state.ready,
-            loggedIn: state.loggedIn,
-            user: state.user ? { ...state.user } : null,
-            memberships: state.memberships.map(item => ({ ...item })),
-            activeAudience: state.activeAudience
-        };
-    }
 
 
     /* ========================================================
