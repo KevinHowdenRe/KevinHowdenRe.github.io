@@ -31,7 +31,7 @@ function update_audience(state){
 }
 
 let state = getState();
-if (state=== null){
+if (state== null){
 	
 }
 else{
