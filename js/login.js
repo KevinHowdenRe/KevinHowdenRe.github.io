@@ -29,12 +29,7 @@ async function login(event) {
             email,
             password
         );
-		const state = getState();
-		for (key in state){
-			console.log(key);
-		}
-		console.log(state);
-		console.log(JSON.stringify(state));
+		
 		console.log(sessionStorage);
         if (!state.loggedIn) {
 
