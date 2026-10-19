@@ -128,6 +128,8 @@ const auth = (() => {
         ) {
             analytics.track("login");
         }
+		
+		console.log(currentState);
 
         return {
             ok: true,
@@ -221,7 +223,7 @@ const auth = (() => {
 			console.log(state);
 			setState(state);
 			
-
+			console.log(getState());
             return getState();
 
         }

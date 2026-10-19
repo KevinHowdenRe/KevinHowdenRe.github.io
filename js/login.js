@@ -42,7 +42,7 @@ async function login(event) {
 
         // État retourné par le serveur
         
-		setState(result.state);
+		setState(result);
 		
 		const state = getState();
 
