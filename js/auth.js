@@ -274,10 +274,7 @@ const auth = (() => {
 
         state.activeAudience = result.data.audience;
 
-        return {
-            ok: true,
-            state: getState()
-        };
+        return getState();
     }
 
 

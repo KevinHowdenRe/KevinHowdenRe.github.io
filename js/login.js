@@ -25,7 +25,7 @@ async function login(event) {
     try {
 
         // Login + stockage du token + récupération /me
-        const result = await auth.login(
+        const state= await auth.login(
             email,
             password
         );
@@ -41,10 +41,7 @@ async function login(event) {
 
 
         // État retourné par le serveur
-	    console.log(result);
-		setState(result);
-		
-		const state = getState();
+
 		console.log(state);
         console.log("User:", state.user);
         console.log("Memberships:", state.memberships);
