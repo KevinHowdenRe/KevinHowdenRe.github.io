@@ -128,8 +128,9 @@ const auth = (() => {
         ) {
             analytics.track("login");
         }
+		console.log(currentState);
 		setState(currentState);
-        return getState();
+        //return getState();
     }
 
 

@@ -25,10 +25,13 @@ async function login(event) {
     try {
 
         // Login + stockage du token + récupération /me
-        const state= await auth.login(
+       await auth.login(
             email,
             password
         );
+		const state = getState();
+		console.log(state);
+		console.log(sessionStorage);
         if (!state.loggedIn) {
 
             errorElement.textContent =
