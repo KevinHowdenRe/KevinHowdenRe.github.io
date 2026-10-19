@@ -34,7 +34,7 @@ async function login(event) {
 			console.log(key);
 		}
 		console.log(state);
-		onsole.log(JSON.stringify(state));
+		console.log(JSON.stringify(state));
 		console.log(sessionStorage);
         if (!state.loggedIn) {
 
