@@ -40,24 +40,10 @@ async function login(event) {
         }
 
 
-        // État retourné par le serveur
 
-		console.log(state);
-        console.log("User:", state.user);
-        console.log("Memberships:", state.memberships);
-        console.log("Active audience:", state.activeAudience);
-
-
-        // Le token est déjà stocké dans sessionStorage
-        console.log(
-            "Token:",
-            auth.getToken()
-        );
-
-		console.log(state);
         // Redirection
         //window.location.href = "../index.html";
-		//update_audience(state);
+		update_audience(state);
 
     }
 
