@@ -128,8 +128,6 @@ const auth = (() => {
         ) {
             analytics.track("login");
         }
-		
-		console.log(currentState);
 		setState(currentState);
         return getState();
     }
@@ -217,10 +215,7 @@ const auth = (() => {
                     : [],
                 activeAudience: result.data.memberships[0]["audience"] || null
             };
-			console.log(state);
 			setState(state);
-			
-			console.log(getState());
             return getState();
 
         }

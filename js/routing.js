@@ -2,7 +2,9 @@
 
 
 function update_audience(state){
+	console.log(state);
 	if (Object.hasOwn(state.user,"email")){
+		console.log("state");
 		document.getElementById("workspace_name").innerHTML = state.user.email;
 		if (state.memberships.length>1){
 		let iHTML = '<select id="scenario">'
@@ -19,7 +21,8 @@ function update_audience(state){
 	}
 
 	else {
-		document.getElementById("workspace_name").innerHTML = 
+		console.log("no state ?");
+		document.getElementById("workspace_name").innerHTML = "Espace public"
 		document.getElementById("workspace_type").innerHTML = "Demonstration"
 	}
 	
@@ -28,7 +31,6 @@ function update_audience(state){
 }
 
 let state = getState();
-console.log(JSON.stringify(state));
 if (state=== null){
 	
 }
