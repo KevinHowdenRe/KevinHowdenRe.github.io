@@ -385,7 +385,7 @@ function setState(value) {
 }
 
 function getState() {
-    return sessionStorage.getItem("state");
+    return JSON.parse(sessionStorage.getItem("state"));
 }
 
 function clearState() {

@@ -216,9 +216,8 @@ const auth = (() => {
                     : [],
                 activeAudience: result.data.memberships[0]["audience"] || null
             };
-			console.log(state);
-			console.log(JSON.stringify(state));
-			setState(JSON.stringify(state));
+	
+			setState(state);
 			console.log(sessionStorage);
         }
         catch (error) {
