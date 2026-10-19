@@ -381,7 +381,7 @@ function switchLight() {
 
 
 function setState(value) {
-    sessionStorage.setItem("state", value);
+    sessionStorage.setItem("state", JSON.stringify(value));
 }
 
 function getState() {
