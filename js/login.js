@@ -30,6 +30,8 @@ async function login(event) {
             password
         );
 		
+		const state = getState();
+		console.log(state);
 		console.log(sessionStorage);
         if (!state.loggedIn) {
 
