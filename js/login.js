@@ -30,7 +30,11 @@ async function login(event) {
             password
         );
 		const state = getState();
+		for (key in state){
+			console.log(key);
+		}
 		console.log(state);
+		onsole.log(JSON.stringify(state));
 		console.log(sessionStorage);
         if (!state.loggedIn) {
 

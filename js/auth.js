@@ -110,7 +110,7 @@ const auth = (() => {
 
         setToken(result.data.token);
 
-        const currentState = await refresh();
+        await refresh();
 
         if (!currentState.loggedIn) {
             clearToken();
@@ -128,8 +128,8 @@ const auth = (() => {
         ) {
             analytics.track("login");
         }
-		console.log(currentState);
-		setState(currentState);
+		console.log(getState());
+		
         //return getState();
     }
 
@@ -184,7 +184,6 @@ const auth = (() => {
         if (!token) {
             resetState();
             state.ready = true;
-            return getState();
         }
 
         try {
@@ -204,7 +203,7 @@ const auth = (() => {
                 resetState();
                 state.ready = true;
 
-                return getState();
+    
             }
 
             state = {
@@ -217,7 +216,6 @@ const auth = (() => {
                 activeAudience: result.data.memberships[0]["audience"] || null
             };
 			setState(state);
-            return getState();
 
         }
         catch (error) {
