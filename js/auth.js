@@ -111,7 +111,8 @@ const auth = (() => {
         setToken(result.data.token);
 
         await refresh();
-
+		const currentState = getState()
+		console.log(sessionStorage)
         if (!currentState.loggedIn) {
             clearToken();
 
