@@ -41,11 +41,11 @@ async function login(event) {
 
 
         // État retourné par le serveur
-        
+	    console.log(result);
 		setState(result);
 		
 		const state = getState();
-
+		console.log(state);
         console.log("User:", state.user);
         console.log("Memberships:", state.memberships);
         console.log("Active audience:", state.activeAudience);

@@ -130,7 +130,7 @@ const auth = (() => {
         }
 		
 		console.log(currentState);
-
+		setState(currentState);
         return {
             ok: true,
             state: getState()
