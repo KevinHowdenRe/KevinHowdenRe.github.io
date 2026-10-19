@@ -3,7 +3,7 @@
 
 function update_audience(state){
 
-	if (state.user != undefined)){
+	if (state.user != undefined){
 		document.getElementById("workspace_name").innerHTML = state.user.email;
 		if (state.memberships.length>1){
 		let iHTML = '<select id="scenario">'
