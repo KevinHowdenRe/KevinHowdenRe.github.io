@@ -1,8 +1,8 @@
 
 
 
-function update_audience(state){
-
+function update_audience(){
+	const state = getState();
 	if (state.user != undefined){
 		document.getElementById("workspace_name").innerHTML = state.user.email;
 		if (state.memberships.length>1){
@@ -29,10 +29,7 @@ function update_audience(state){
 	
 }
 console.log(sessionStorage);
-let state = getState();
-if (state== null){
-	
-}
-else{
-	update_audience(state);
+
+if (Object.hasOwn(sessionStorage,"state")){
+	update_audience();
 }
