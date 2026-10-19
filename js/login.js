@@ -29,7 +29,7 @@ async function login(event) {
             email,
             password
         );
-        if (!result.loggedIn) {
+        if (!state.loggedIn) {
 
             errorElement.textContent =
                 "Invalid email or password.";
