@@ -33,6 +33,7 @@ async function login(event) {
 		const state = getState();
 		console.log(state);
 		console.log(sessionStorage);
+		console.log(state.loggedIn);
         if (!state.loggedIn) {
 
             errorElement.textContent =
