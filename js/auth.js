@@ -309,7 +309,7 @@ const auth = (() => {
        SERVE PAGE
        ======================================================== */
 	
-	function getPage(){
+	async function getPage(){
 		
 		const result = await api(
             "/content/HALdev/root/home",
