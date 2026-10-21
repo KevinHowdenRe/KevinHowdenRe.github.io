@@ -19,7 +19,7 @@ function updateAudience(){
 	
 	// get audience page
 	
-	auth.getPage();
+	window.auth.getPage();
 	
 	}
 
