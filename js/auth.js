@@ -338,7 +338,7 @@ const auth = (() => {
 		}
 
 		const html = await response.text();
-
+		console.log(html);
 		document.getElementById("page_content").innerHTML = html;
 
 		return true;
