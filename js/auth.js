@@ -58,6 +58,7 @@ const auth = (() => {
         if (token) {
             headers.set("Authorization", `Bearer ${token}`);
         }
+		console.log(headers);
         const response = await fetch(
             AUTH_CONFIG.apiBaseUrl + path,
             {
@@ -317,7 +318,7 @@ const auth = (() => {
         }
 		
 		const urlPath = "/HALdev/root/home";
-		const src = "https://hrf.pythonanywhere.com/" + urlPath + "?t=" + encodeURIComponent(token);
+		const src = "https://hrf.pythonanywhere.com/content/" + urlPath + "?t=" + encodeURIComponent(token);
 		console.log(src);
 		const result = await api(
             "/content/HALdev/root/home",
