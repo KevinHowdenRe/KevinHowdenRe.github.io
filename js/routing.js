@@ -40,5 +40,5 @@ async function updateAudience(){
 
 console.log(sessionStorage);
 
-await updateAudience();
+updateAudience();
 
