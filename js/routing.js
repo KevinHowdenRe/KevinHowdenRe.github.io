@@ -44,5 +44,5 @@ function distrib_page(){
 console.log(sessionStorage);
 
 if (Object.hasOwn(sessionStorage,"state")){
-	updateAudience();
+	await updateAudience();
 }
