@@ -1,7 +1,7 @@
 
 
 
-function updateAudience(){
+async function updateAudience(){
 	const state = getState();
 	if (state.user != undefined){
 		document.getElementById("workspace_name").innerHTML = state.user.email;
