@@ -310,7 +310,15 @@ const auth = (() => {
        ======================================================== */
 	
 	async function getPage(){
+		const token = getToken();
+		if (! token) {
+            console.log("Not logged");
+			return false;
+        }
 		
+		const urlPath = "/HALdev/root/home";
+		const src = "https://hrf.pythonanywhere.com/" + urlPath + "?t=" + encodeURIComponent(token);
+		console.log(src);
 		const result = await api(
             "/content/HALdev/root/home",
             {
