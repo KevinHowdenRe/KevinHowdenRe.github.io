@@ -1,7 +1,7 @@
 
 
 
-function update_audience(){
+function updateAudience(){
 	const state = getState();
 	if (state.user != undefined){
 		document.getElementById("workspace_name").innerHTML = state.user.email;
@@ -16,20 +16,33 @@ function update_audience(){
 	else {
 		document.getElementById("workspace_type").innerHTML = state.memberships[0].label;
 	}
-
+	
+	// get audience page
+	
+	getPage();
+	
 	}
 
 	else {
 		console.log("no state ?");
 		document.getElementById("workspace_name").innerHTML = "Espace public"
 		document.getElementById("workspace_type").innerHTML = "Demonstration"
+	
+    // get standard page
+		
 	}
 	
 	
 	
 }
+
+
+function distrib_page(){
+	
+}
+
 console.log(sessionStorage);
 
 if (Object.hasOwn(sessionStorage,"state")){
-	update_audience();
+	updateAudience();
 }

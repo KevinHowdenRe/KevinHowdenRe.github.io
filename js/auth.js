@@ -304,7 +304,26 @@ const auth = (() => {
             activeAudience: null
         };
     }
-
+	
+	/* ========================================================
+       SERVE PAGE
+       ======================================================== */
+	
+	function getPage(){
+		
+		const result = await api(
+            "/content/HALdev/root/home",
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }
+        );
+		
+		console.log(result);
+	}
+	
 
 
     /* ========================================================
