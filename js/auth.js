@@ -74,6 +74,11 @@ const auth = (() => {
         }
         catch {
             data = {};
+		    data = await response.text();
+
+			console.log("STATUS:", response.status);
+			console.log("BODY:", data);
+
         }
 
         return {
@@ -319,8 +324,7 @@ const auth = (() => {
         }
 		
 		const urlPath = "/HALdev/root/home";
-		const src = "https://hrf.pythonanywhere.com/content/" + urlPath + "?t=" + encodeURIComponent(token);
-		console.log(src);
+
 		const result = await api(
             "/content/HALdev/root/home",
             {
