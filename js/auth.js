@@ -313,24 +313,35 @@ const auth = (() => {
        SERVE PAGE
        ======================================================== */
 	
-	async function getPage(){
-		const token = getToken();
-		if (! token) {
-            console.log("Not logged");
-			return false;
-        }
-		
-		const urlPath = "/HALdev/root/home";
+	async function getPage() {
 
-		const result = await api(
-            "/content/HALdev/root/home",
-            {
-                method: "GET",
-    
-            }
-        );
-		
-		console.log(result);
+		const token = getToken();
+
+		if (!token) {
+			console.log("Not logged");
+			return false;
+		}
+
+		const response = await fetch(
+			AUTH_CONFIG.apiBaseUrl + "/content/HALdev/root/home",
+			{
+				method: "GET",
+				headers: {
+					"Authorization": `Bearer ${token}`
+				}
+			}
+		);
+
+		if (!response.ok) {
+			console.error("Unable to load page:", response.status);
+			return false;
+		}
+
+		const html = await response.text();
+
+		document.getElementById("page_content").innerHTML = html;
+
+		return true;
 	}
 	
 
