@@ -58,7 +58,8 @@ const auth = (() => {
         if (token) {
             headers.set("Authorization", `Bearer ${token}`);
         }
-		console.log(headers);
+		console.log(headers.get("Authorization"));
+		console.log(AUTH_CONFIG.apiBaseUrl + path);
         const response = await fetch(
             AUTH_CONFIG.apiBaseUrl + path,
             {
@@ -324,9 +325,7 @@ const auth = (() => {
             "/content/HALdev/root/home",
             {
                 method: "GET",
-                headers: {
-                    "Content-Type": "application/json"
-                }
+    
             }
         );
 		
