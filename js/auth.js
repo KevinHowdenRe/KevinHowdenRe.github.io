@@ -74,10 +74,7 @@ const auth = (() => {
         }
         catch {
             data = {};
-		    data = await response.text();
-
-			console.log("STATUS:", response.status);
-			console.log("BODY:", data);
+		    
 
         }
 
