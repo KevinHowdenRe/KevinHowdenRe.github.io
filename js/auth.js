@@ -54,7 +54,7 @@ const auth = (() => {
 
         const headers = new Headers(options.headers || {});
         const token = getToken();
-
+		console.log(token);
         if (token) {
             headers.set("Authorization", `Bearer ${token}`);
         }
