@@ -348,7 +348,8 @@ const auth = (() => {
         hasMembership,
         hasAnyMembership,
         getState,
-        getToken
+        getToken,
+		getPage
     };
 
 })();
