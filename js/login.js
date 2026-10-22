@@ -78,7 +78,7 @@ function isLogged(){
 
 function logout(){
 	// removed token 
-	clearToken();
+	auth.clearToken();
 	// remove state
 	 clearState();
 }
