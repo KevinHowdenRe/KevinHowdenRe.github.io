@@ -65,10 +65,12 @@ function isLogged(){
 	if (Object.hasOwn(sessionStorage,"state")){
 		const state = sessionStorage.state;
 		if (state.user != undefined){
+			console.log("Logged !");
 			return true;
 		}
 	}
 	else{
+		console.log("Not logged ! ");
 		return false;
 	}
 	
@@ -90,9 +92,11 @@ try{
 }
 
 catch(error){
+	console.log("Potentially changing the login label");
 	// if raising error : check if is logged 
 	if(isLogged()){
 		// if yes change login link with logout and remove token + state #and onclick come back to home
+		console.log("Changing the login label");
 		var log_link = document.getElementById("login_link");
 		log_link.innerHTML = "Logout";
 		log_link.onclick = function() { clearToken();  clearState();};
