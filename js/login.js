@@ -99,7 +99,7 @@ catch(error){
 		console.log("Changing the login label");
 		var log_link = document.getElementById("login_link");
 		log_link.innerHTML = "Logout";
-		log_link.onclick = function() { clearToken();  clearState();};
+		log_link.href = "javascript:logout();";
 		
 		
 		
