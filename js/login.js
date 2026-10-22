@@ -73,10 +73,6 @@ function isLogged(){
 	
 }
 
-Storage {analytics_session_id: '9994dbfe-1de8-473b-9a13-3a3f40b824ab', length: 1}
-
-Storage {auth_token: '9pB3rxCi2OxbXrKtv3SKjN2xeJHKibnakwEvNyG08MU', analytics_session_id: '9994dbfe-1de8-473b-9a13-3a3f40b824ab', state: '{"ready":true,"loggedIn":true,"user":{"created_at"…mo","site_id":"HALdev"}],"activeAudience":"demo"}', length: 3}
-
 function logout(){
 	// removed token 
 	clearToken();
