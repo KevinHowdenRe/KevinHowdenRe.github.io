@@ -11,17 +11,23 @@ function getAudience(){
 }
 
 function getTypeOfPages(){
-	const href = window.location.href;
-	const radical = href.split("pages/")[1];
-	const extension = radical.split("/")[1];
-	console.log(href);
-	console.log(radical);
-	console.log(extension);
-	if (extension == undefined){
-		return "radical"
+	try{
+		
+		const href = window.location.href;
+		const radical = href.split("pages/")[1];
+		const extension = radical.split("/")[1];
+		console.log(href);
+		console.log(radical);
+		console.log(extension);
+		if (extension == undefined){
+			return radical.split(".html")[0]
+		}
+		else{
+			return "extension"
+		}
 	}
-	else{
-		return "extension"
+	catch(error){
+		return "home"
 	}
 }
 
