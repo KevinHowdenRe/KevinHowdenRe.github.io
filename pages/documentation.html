@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Articles, notes and ideas.">
+  <title>HAL · Documentation</title>
+  <link rel="stylesheet" href="../css/base.css">
+  
+</head>
+
+
+
+
+<body>
+<div class="app">
+
+
+  <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header class="header">
+
+        <a href="../index.html"
+           class="header-brand">
+            HAL
+        </a>
+
+
+        <nav class="header-nav">
+
+            <a href="../index.html" class="active">
+                Home
+            </a>
+			
+			<a href="articles.html" class="active">
+                Articles
+            </a>
+
+          
+            <a href="documentation.html" class="active">
+                Documentation
+            </a>
+                
+            <a href="solutions.html" class="active">
+                Solutions
+            </a>
+			
+			
+			<a href="login.html" class="active">
+                 Login
+            </a>
+			
+			<button onclick="switchLight()" id="interrupteur" class="theme-toggle" id="theme-toggle" aria-label="Switch theme">
+    ☾ 
+</button>
+
+
+        </nav>
+
+    </header>
+
+
+
+
+
+
+
+
+  <main class="page">
+    <section style="padding-top:80px;padding-bottom:80px;border-bottom:1px solid var(--color-border);">
+      <div style="max-width:950px;">
+        <span class="badge">Journal</span>
+        <h1 style="font-size:clamp(3rem,7vw,6.5rem);line-height:.95;margin-top:24px;margin-bottom:28px;max-width:950px;">
+          Notes, ideas<br>and experiments.
+        </h1>
+        <p class="text-secondary" style="max-width:620px;font-size:1.125rem;margin-bottom:0;">
+          A collection of thoughts on technology, data, design and the things I'm currently exploring.
+        </p>
+      </div>
+    </section>
+
+    <section style="padding-top:64px;padding-bottom:100px;">
+      <div class="page-header">
+        <div>
+          <h2 class="page-title">Articles</h2>
+          <p class="page-description">All notes and publications.</p>
+        </div>
+      </div>
+
+      <a href="articles/designing-tools.html">
+        <article style="display:grid;grid-template-columns:140px minmax(0,1fr) auto;gap:32px;align-items:center;padding:30px 0;border-top:1px solid var(--color-border);">
+          <div class="text-small text-secondary">10 Oct 2026</div>
+          <div>
+            <h3 style="margin-bottom:8px;max-width:750px;">Designing tools that stay simple as they grow</h3>
+            <div class="flex items-center gap-3">
+              <span class="badge">Design</span>
+              <span class="text-small text-secondary">8 min read</span>
+            </div>
+          </div>
+          <span style="font-size:1.4rem;">→</span>
+        </article>
+      </a>
+
+      <a href="articles/interfaces-data.html">
+        <article style="display:grid;grid-template-columns:140px minmax(0,1fr) auto;gap:32px;align-items:center;padding:30px 0;border-top:1px solid var(--color-border);">
+          <div class="text-small text-secondary">06 Oct 2026</div>
+          <div>
+            <h3 style="margin-bottom:8px;max-width:750px;">Building interfaces around the data, not around the framework</h3>
+            <div class="flex items-center gap-3">
+              <span class="badge">Technology</span>
+              <span class="text-small text-secondary">6 min read</span>
+            </div>
+          </div>
+          <span style="font-size:1.4rem;">→</span>
+        </article>
+      </a>
+
+      <a href="articles/mapping-systems.html">
+        <article style="display:grid;grid-template-columns:140px minmax(0,1fr) auto;gap:32px;align-items:center;padding:30px 0;border-top:1px solid var(--color-border);">
+          <div class="text-small text-secondary">28 Sep 2026</div>
+          <div>
+            <h3 style="margin-bottom:8px;max-width:750px;">Mapping complex systems visually</h3>
+            <div class="flex items-center gap-3">
+              <span class="badge">Data</span>
+              <span class="text-small text-secondary">5 min read</span>
+            </div>
+          </div>
+          <span style="font-size:1.4rem;">→</span>
+        </article>
+      </a>
+
+      <a href="articles/reproducibility.html">
+        <article style="display:grid;grid-template-columns:140px minmax(0,1fr) auto;gap:32px;align-items:center;padding:30px 0;border-top:1px solid var(--color-border);border-bottom:1px solid var(--color-border);">
+          <div class="text-small text-secondary">17 Sep 2026</div>
+          <div>
+            <h3 style="margin-bottom:8px;max-width:750px;">Reproducibility as a design decision</h3>
+            <div class="flex items-center gap-3">
+              <span class="badge">Research</span>
+              <span class="text-small text-secondary">7 min read</span>
+            </div>
+          </div>
+          <span style="font-size:1.4rem;">→</span>
+        </article>
+      </a>
+    </section>
+
+    <footer style="padding:32px 0;border-top:1px solid var(--color-border);">
+      <div class="flex justify-between items-center gap-4" style="flex-wrap:wrap;">
+        <strong>Base UI</strong>
+        <div class="text-small text-secondary">Notes · Ideas · Experiments</div>
+      </div>
+    </footer>
+  </main>
+</div>
+
+<script src="../js/base.js"></script>
+<!-- Auth -->
+<script src="../js/auth.js"></script>
+<!-- Login -->
+<script src="../js/login.js"></script>
+<!-- Analytics -->
+<script src="../js/analytics.js"></script>
+<!-- Routing -->
+<script src="../js/routing.js"></script>
+</body>
+</html>

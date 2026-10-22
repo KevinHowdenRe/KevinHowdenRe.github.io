@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Articles, notes and ideas.">
+  <title>HAL · Solutions</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/portfolio.css">
+  
+</head>
+
+
+
+
+<body>
+<div class="app">
+
+
+  <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header class="header">
+
+        <a href="../index.html"
+           class="header-brand">
+            HAL
+        </a>
+
+
+        <nav class="header-nav">
+
+            <a href="../index.html" class="active">
+                Home
+            </a>
+			
+			<a href="articles.html" class="active">
+                Articles
+            </a>
+
+          
+            <a href="documentation.html" class="active">
+                Documentation
+            </a>
+                
+            <a href="solutions.html" class="active">
+                Solutions
+            </a>
+			
+			
+			<a href="login.html" class="active">
+                 Login
+            </a>
+			
+			<button onclick="switchLight()" id="interrupteur" class="theme-toggle" id="theme-toggle" aria-label="Switch theme">
+    ☾ 
+</button>
+
+
+        </nav>
+
+    </header>
+
+  <main class="page portfolio-page">
+    <section class="portfolio-hero">
+      <div class="portfolio-hero-inner">
+        <div>
+          <span class="badge">Selected work</span>
+          <h1 class="portfolio-title">Projects<br>and experiments.</h1>
+        </div>
+        <p class="portfolio-intro">
+          Analytical tools, climate research, visual interfaces and digital experiments. Different outputs, connected by a shared interest in data, space and interaction.
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <div class="portfolio-toolbar">
+        <div class="portfolio-filters" aria-label="Project filters">
+          <button class="portfolio-filter active" type="button">All</button>
+          <button class="portfolio-filter" type="button">Climate</button>
+          <button class="portfolio-filter" type="button">Data</button>
+          <button class="portfolio-filter" type="button">Web</button>
+          <button class="portfolio-filter" type="button">Experiments</button>
+        </div>
+        <span class="text-small text-secondary">06 selected projects</span>
+      </div>
+
+      <div class="portfolio-grid">
+        <a class="project project-wide" href="#" aria-label="Explore climate modelling project">
+          <img class="project-image" src="https://images.unsplash.com/photo-1569511166187-97eb6e387e19?auto=format&fit=crop&w=1800&q=85" alt="Cloud formations viewed from above">
+          <div class="project-meta">
+            <div>
+              <div class="project-index">01 · Climate</div>
+              <h2 class="project-title">Climate modelling</h2>
+              <div class="project-type">Research · Python · 2026</div>
+            </div>
+            <span class="project-arrow">↗</span>
+          </div>
+        </a>
+
+        <a class="project project-narrow" href="#" aria-label="Explore spatial analytics project">
+          <img class="project-image" src="https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?auto=format&fit=crop&w=1400&q=85" alt="Dense city viewed from above">
+          <div class="project-meta">
+            <div>
+              <div class="project-index">02 · Spatial</div>
+              <h2 class="project-title">Accumulation analytics</h2>
+              <div class="project-type">Maps · Insurance · Web</div>
+            </div>
+            <span class="project-arrow">↗</span>
+          </div>
+        </a>
+
+        <a class="project project-narrow" href="#" aria-label="Explore data interface project">
+          <img class="project-image" src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1400&q=85" alt="Analytical dashboard on a screen">
+          <div class="project-meta">
+            <div>
+              <div class="project-index">03 · Data</div>
+              <h2 class="project-title">Risk dashboards</h2>
+              <div class="project-type">Analytics · Plotly · UI</div>
+            </div>
+            <span class="project-arrow">↗</span>
+          </div>
+        </a>
+
+        <a class="project project-wide" href="#" aria-label="Explore digital architecture project">
+          <img class="project-image" src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1800&q=85" alt="Modern architectural structure">
+          <div class="project-meta">
+            <div>
+              <div class="project-index">04 · Systems</div>
+              <h2 class="project-title">Exposure architecture</h2>
+              <div class="project-type">Pipelines · Models · Audit</div>
+            </div>
+            <span class="project-arrow">↗</span>
+          </div>
+        </a>
+
+        <a class="project" href="#" aria-label="Explore web applications project">
+          <img class="project-image" src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1600&q=85" alt="Web development workspace">
+          <div class="project-meta">
+            <div>
+              <div class="project-index">05 · Web</div>
+              <h2 class="project-title">Application toolkit</h2>
+              <div class="project-type">Flask · JavaScript · PWA</div>
+            </div>
+            <span class="project-arrow">↗</span>
+          </div>
+        </a>
+
+        <a class="project" href="#" aria-label="Explore visual experiments project">
+          <img class="project-image" src="https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?auto=format&fit=crop&w=1600&q=85" alt="Colourful abstract three-dimensional form">
+          <div class="project-meta">
+            <div>
+              <div class="project-index">06 · Experiments</div>
+              <h2 class="project-title">Interactive worlds</h2>
+              <div class="project-type">3D · Visualisation · Creative code</div>
+            </div>
+            <span class="project-arrow">↗</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <footer class="portfolio-footer">
+      <div class="flex justify-between items-center gap-4 flex-wrap">
+        <strong>Base UI</strong>
+        <span class="text-small text-secondary">Selected work · 2026</span>
+      </div>
+    </footer>
+  </main>
+</div>
+
+<script src="../js/base.js"></script>
+<script src="../js/portfolio.js"></script>
+
+<!-- Auth -->
+<script src="../js/auth.js"></script>
+<!-- Login -->
+<script src="../js/login.js"></script>
+<!-- Analytics -->
+<script src="../js/analytics.js"></script>
+<!-- Routing -->
+<script src="../js/routing.js"></script>
+</body>
+</html>
