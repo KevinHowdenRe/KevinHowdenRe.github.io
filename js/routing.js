@@ -1,5 +1,6 @@
 function getAudience(){
 	if (Object.hasOwn(sessionStorage,"state")){
+		const state = sessionStorage.state;
 		if (state.user != undefined){
 			return state.activeAudience;
 		}

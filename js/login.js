@@ -63,6 +63,7 @@ async function login(event) {
 
 function isLogged(){
 	if (Object.hasOwn(sessionStorage,"state")){
+		const state = sessionStorage.state;
 		if (state.user != undefined){
 			return true;
 		}
