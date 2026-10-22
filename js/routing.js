@@ -12,6 +12,8 @@ function getAudience(){
 
 function getTypeOfPages(){
 	const href = window.location.href;
+	const radical = href.split("pages/")[1];
+	console.log(radical);
 	return href;
 }
 
