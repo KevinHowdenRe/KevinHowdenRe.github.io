@@ -1,5 +1,40 @@
+function getAudience(){
+	if (Object.hasOwn(sessionStorage,"state")){
+		if (state.user != undefined){
+			return state.activeAudience;
+		}
+	}
+	else{
+		return null;
+	}
+	
+}
+
+function getTypeOfPages(){
+	const href = window.location.href;
+	return href;
+}
 
 
+function fetchBaseContent(){
+	const audience = getAudience();
+	
+}
+
+function fetchCustomContent(){
+	const audience = getAudience();
+}
+
+
+
+function pageLoading(){
+	const page_type = getTypeOfPages();
+	console.log(page_type);
+	
+	const audience = fetchBaseContent();
+	
+	console.log(audience);
+}
 
 async function updateAudience(){
 	if (Object.hasOwn(sessionStorage,"state")){
@@ -39,6 +74,6 @@ async function updateAudience(){
 
 
 console.log(sessionStorage);
-
-updateAudience();
+pageLoading();
+//updateAudience();
 
