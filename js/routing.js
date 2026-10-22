@@ -1,6 +1,7 @@
 function getAudience(){
 	if (Object.hasOwn(sessionStorage,"state")){
-		const state = sessionStorage.state;
+		const state = getState();
+		
 		if (state.user != undefined){
 			return state.activeAudience;
 		}
@@ -17,9 +18,6 @@ function getTypeOfPages(){
 		const href = window.location.href;
 		const radical = href.split("pages/")[1];
 		const extension = radical.split("/")[1];
-		console.log(href);
-		console.log(radical);
-		console.log(extension);
 		if (extension == undefined){
 			return radical.split(".html")[0]
 		}
