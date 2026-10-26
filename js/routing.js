@@ -42,15 +42,6 @@ function fetchCustomContent(){
 
 
 
-function pageLoading(){
-	const page_type = getTypeOfPages();
-	console.log(page_type);
-	
-	const audience = fetchBaseContent();
-	
-	console.log(audience);
-}
-
 async function updateAudience(){
 	if (Object.hasOwn(sessionStorage,"state")){
 	
@@ -85,6 +76,39 @@ async function updateAudience(){
 		}
 	}
 	
+}
+
+
+function pageLoading(){
+	const page_type = getTypeOfPages();
+	console.log(page_type);
+	
+	const audience = fetchBaseContent();
+	
+	// Try adding an event listener for the login form
+	try{
+		document.getElementById("login-form").addEventListener("submit", login);
+		
+	}
+
+	catch(error){
+		console.log("Potentially changing the login label");
+		// if raising error : check if is logged 
+		if(isLogged()){
+			// if yes change login link with logout and remove token + state #and onclick come back to home
+			console.log("Changing the login label");
+			var log_link = document.getElementById("login_link");
+			log_link.innerHTML = "Logout";
+			
+			log_link.href = "javascript:logout();window.location.replace(AUTH_CONFIG.loginUrl);";
+			
+			
+			
+		}
+	}
+	
+	updateAudience();
+
 }
 
 

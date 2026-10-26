@@ -85,27 +85,6 @@ function logout(){
 
 
 
-// Try adding an event listener for the login form
-try{
-	document.getElementById("login-form").addEventListener("submit", login);
-	
-}
-
-catch(error){
-	console.log("Potentially changing the login label");
-	// if raising error : check if is logged 
-	if(isLogged()){
-		// if yes change login link with logout and remove token + state #and onclick come back to home
-		console.log("Changing the login label");
-		var log_link = document.getElementById("login_link");
-		log_link.innerHTML = "Logout";
-		
-		log_link.href = "javascript:logout();window.location.replace(AUTH_CONFIG.loginUrl);";
-		
-		
-		
-	}
-}
 
 
 
