@@ -47,6 +47,7 @@ async function updateAudience(){
 	
 		const state = getState();
 		if (state.user != undefined){
+			console.log(state)
 			document.getElementById("workspace_name").innerHTML = state.user.email;
 			if (state.memberships.length>1){
 			let iHTML = '<select id="scenario">'
@@ -56,13 +57,14 @@ async function updateAudience(){
 			iHTML += "</select>"
 			document.getElementById("workspace_type").innerHTML = iHTML;
 		}
-		else {
-			document.getElementById("workspace_type").innerHTML = state.memberships[0].label;
-		}
+			else {
+				document.getElementById("workspace_type").innerHTML = state.memberships[0].label;
+			}
 		
 		// get audience page
 		
 		await auth.getPage();
+		console.log(document.getElementById("workspace_name").innerHTML)
 		
 		}
 
@@ -101,9 +103,7 @@ function pageLoading(){
 			log_link.innerHTML = "Logout";
 			
 			log_link.href = "javascript:logout();window.location.replace(AUTH_CONFIG.loginUrl);";
-			
-			
-			
+
 		}
 	}
 	
