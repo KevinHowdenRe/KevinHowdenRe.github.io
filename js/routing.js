@@ -47,7 +47,11 @@ async function updateAudience(){
 	
 		const state = getState();
 		if (state.user != undefined){
-			console.log(state)
+			// get audience page
+		
+			await auth.getPage();
+			
+			
 			document.getElementById("workspace_name").innerHTML = state.user.email;
 			if (state.memberships.length>1){
 			let iHTML = '<select id="scenario">'
@@ -61,15 +65,11 @@ async function updateAudience(){
 				document.getElementById("workspace_type").innerHTML = state.memberships[0].label;
 			}
 		
-		// get audience page
-		
-		await auth.getPage();
-		console.log(document.getElementById("workspace_name").innerHTML)
+	
 		
 		}
 
 		else {
-			console.log("no state ?");
 			document.getElementById("workspace_name").innerHTML = "Espace public"
 			document.getElementById("workspace_type").innerHTML = "Demonstration"
 		
@@ -94,7 +94,6 @@ function pageLoading(){
 	}
 
 	catch(error){
-		console.log("Potentially changing the login label");
 		// if raising error : check if is logged 
 		if(isLogged()){
 			// if yes change login link with logout and remove token + state #and onclick come back to home
@@ -112,7 +111,6 @@ function pageLoading(){
 }
 
 
-console.log(sessionStorage);
 pageLoading();
 //updateAudience();
 

@@ -320,7 +320,6 @@ const auth = (() => {
 		const token = getToken();
 
 		if (!token) {
-			console.log("Not logged");
 			return false;
 		}
 
@@ -340,7 +339,6 @@ const auth = (() => {
 		}
 
 		const html = await response.text();
-		console.log(html);
 		document.getElementById("page_content").innerHTML = html;
 
 		return true;
