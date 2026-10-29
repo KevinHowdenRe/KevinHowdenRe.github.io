@@ -1,0 +1,241 @@
+<body>
+<div class="app">
+
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header class="header">
+
+        <a href="index.html"
+           class="header-brand">
+            HAL
+        </a>
+
+
+        <nav class="header-nav">
+
+            <a href="index.html" class="active">
+                Accueil
+            </a>
+			
+			<a href="pages/articles.html" class="active">
+                Articles
+            </a>
+
+          
+            <a href="pages/documentation.html" class="active">
+                Documentation
+            </a>
+                
+            <a href="pages/solutions.html" class="active">
+                Solutions
+            </a>
+			
+			
+			<a id="login_link" href="pages/login.html" class="active">
+                 Login
+            </a>
+			
+			<button onclick="switchLight()" id="interrupteur" class="theme-toggle" id="theme-toggle" aria-label="Switch theme">
+    ☾ 
+</button>
+
+
+        </nav>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         MAIN
+         ===================================================== -->
+
+    <main id="page_content" class="page">
+
+
+        <!-- =================================================
+             HERO
+             ================================================= -->
+
+        <section style="
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+        ">
+
+            <div style="max-width: 760px;">
+
+                <span class="badge mb-4">
+                    Sandbox
+                </span>
+
+                <h1>
+                    Bienvenue
+                </h1>
+
+                <p class="page-description"
+                   style="
+                       font-size: 1.125rem;
+                       max-width: 650px;
+                       margin-top: 20px;
+                   ">
+					Notre plateforme met à disposition des solutions analytiques dédiées à vos besoins.
+                    Développées en interne et améliorées de manière itérative avec nos clients, 
+					ces solutions sont transparentes et permmettent une parfaite confidentialité des données gràce à l'approche <a href="#">Client side</a>.
+					
+                </p>
+
+
+             
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             PRINCIPLES
+             ================================================= -->
+
+        <section>
+
+            <div class="page-header">
+
+                <div>
+
+                    <h2 class="page-title">
+                        Utile & évolutif
+                    </h2>
+
+                    <p class="page-description">
+                       Enrichie par vos retours et en prenant en compte les dernières innovations du marché.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="grid grid-3">
+
+
+                <article class="card">
+
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            Accès live.
+                        </h3>
+                    </div>
+
+                    <p class="text-secondary mb-0">
+                      Usage illimité pour la plupart des applications et en temps réel.
+                    </p>
+
+                </article>
+
+
+                <article class="card">
+
+                    <div class="card-header">
+                        <h3 class="card-title">
+                           Multi utilisateurs.
+                        </h3>
+                    </div>
+
+                    <p class="text-secondary mb-0">
+                        Pas de restriction du nombres d'utilisateurs.
+                    </p>
+
+                </article>
+				
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             DEMOS
+             ================================================= -->
+
+        <section id="demos"
+                 style="margin-top: 80px;">
+
+            <div class="page-header">
+
+                <div>
+
+                    <h2 class="page-title">
+                        Demande d'informations
+                    </h2>
+
+                    <p class="page-description">
+                        Contactez notre equipe pour plus d'informations sur les solutions disponibles.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+
+
+        <!-- =================================================
+             FOOTER
+             ================================================= -->
+
+        <footer style="
+            margin-top: 100px;
+            padding: 32px 0;
+            border-top: 1px solid var(--color-border);
+        ">
+
+            <div class="flex justify-between items-center gap-4"
+                 style="flex-wrap: wrap;">
+
+                <div>
+
+                    <strong id="workspace_type">
+                       Espace public
+                    </strong>
+
+                    <div id="workspace_name" class="text-small text-secondary">
+                        Démonstration
+                    </div>
+
+                </div>
+
+
+                <div class="text-small text-secondary">
+                    Créer par <a href="https://kahemka.github.io/">KMK Lab</a>.
+                </div>
+
+            </div>
+
+        </footer>
+
+
+    </main>
+
+</div>
+
+
+<!-- Core JS -->
+<script src="./js/base.js"></script>
+<!-- Auth -->
+<script src="./js/auth.js"></script>
+<!-- Login -->
+<script src="./js/login.js"></script>
+<!-- Analytics -->
+<script src="./js/analytics.js"></script>
+<!-- Routing -->
+<script src="./js/routing.js"></script>
+</body>

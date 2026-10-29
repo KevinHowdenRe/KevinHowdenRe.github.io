@@ -1,3 +1,6 @@
+const base_radical = ["articles","solutions","documentation","index"]
+
+
 function getAudience(){
 	if (Object.hasOwn(sessionStorage,"state")){
 		const state = getState();
@@ -18,28 +21,51 @@ function getTypeOfPages(){
 		const href = window.location.href;
 		const radical = href.split("pages/")[1];
 		const extension = radical.split("/")[1];
+		console.log(href);
+		console.log(radical);
+		console.log(extension);
 		if (extension == undefined){
 			return radical.split(".html")[0]
 		}
 		else{
-			return "extension"
+			return extension
 		}
 	}
 	catch(error){
-		return "home"
+		return "index"
 	}
 }
-
-
-function fetchBaseContent(){
-	const audience = getAudience();
+async function loadUnloggedPage(radical) {
 	
+	if (base_radical.includes(radical)){
+		// load page 
+		const response = await fetch(`./base/${radical}.html`);
+		const html = await response.text();
+
+		const content =  new DOMParser()
+						.parseFromString(html, 'text/html')
+						.body
+						.innerHTML;
+						
+		document.getElementById("content").innerHTML = content;
+		}
+	
+	else if (radical=="login"){
+		// do nothing 
+	}
+	
+	else{
+		// error 401
+	}
+	
+	
+   
 }
 
-function fetchCustomContent(){
-	const audience = getAudience();
-}
 
+async function loadLoggedPage(radical){
+	// to do
+}
 
 
 async function updateAudience(){
@@ -47,9 +73,8 @@ async function updateAudience(){
 	
 		const state = getState();
 		if (state.user != undefined){
-			// get audience page
 		
-			await auth.getPage();
+			
 			
 			
 			document.getElementById("workspace_name").innerHTML = state.user.email;
@@ -82,10 +107,8 @@ async function updateAudience(){
 
 
 function pageLoading(){
-	const page_type = getTypeOfPages();
-	console.log(page_type);
-	
-	const audience = fetchBaseContent();
+	const logged = isLogged();
+	const radical = getTypeOfPages();
 	
 	// Try adding an event listener for the login form
 	try{
@@ -95,9 +118,8 @@ function pageLoading(){
 
 	catch(error){
 		// if raising error : check if is logged 
-		if(isLogged()){
+		if(logged){
 			// if yes change login link with logout and remove token + state #and onclick come back to home
-			console.log("Changing the login label");
 			var log_link = document.getElementById("login_link");
 			log_link.innerHTML = "Logout";
 			
@@ -106,11 +128,19 @@ function pageLoading(){
 		}
 	}
 	
+	if (logged){
+	}
+	
+	else{
+		loadUnloggedPage(radical);
+	}
+	
+	
 	updateAudience();
 
 }
 
 
 pageLoading();
-//updateAudience();
+
 
