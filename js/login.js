@@ -4,7 +4,7 @@
 
 
 async function login(event) {
-
+	console.log("Starting login process");
     event.preventDefault();
 
     const email = document
@@ -41,7 +41,7 @@ async function login(event) {
             return;
         }
 
-
+		console.log("ok");
 
         // Redirection
         window.location.href = "index.html";
