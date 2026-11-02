@@ -84,9 +84,3 @@ function logout(){
 }
 
 
-
-
-
-
- 
-// also need to add logout

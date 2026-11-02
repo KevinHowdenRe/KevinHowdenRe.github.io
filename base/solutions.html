@@ -1,0 +1,131 @@
+<div class="app">
+
+
+  <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header class="header">
+
+        <a href="index.html"
+           class="header-brand">
+            HAL
+        </a>
+
+
+        <nav class="header-nav">
+
+            <a href="index.html" class="active">
+                Accueil
+            </a>
+			
+			<a href="articles.html" class="active">
+                Articles
+            </a>
+
+          
+            <a href="documentation.html" class="active">
+                Documentation
+            </a>
+                
+            <a href="solutions.html" class="active">
+                Solutions
+            </a>
+			
+			
+			<a id="login_link" href="login.html" class="active">
+                 Login
+            </a>
+			
+			<button onclick="switchLight()" id="interrupteur" class="theme-toggle" id="theme-toggle" aria-label="Switch theme">
+    ☾ 
+</button>
+
+
+        </nav>
+
+    </header>
+
+  <main class="page portfolio-page">
+    <section class="portfolio-hero">
+      <div class="portfolio-hero-inner">
+        <div>
+          <span class="badge">Applications disponibles</span>
+          <h1 class="portfolio-title">Outils &<br>Solutions dynamiques</h1>
+        </div>
+        <p class="portfolio-intro">
+          Outils analytiques, interfaces visuelles pour les études appliquées et la restitution de modèles
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <div class="portfolio-toolbar">
+ 
+      </div>
+
+      <div class="portfolio-grid">
+        <a class="project project-wide" href="/solutions/havoc" aria-label="Explore climate modelling project">
+          <img class="project-image" src="https://images.unsplash.com/photo-1569511166187-97eb6e387e19?auto=format&fit=crop&w=1800&q=85" alt="Cloud formations viewed from above">
+          <div class="project-meta">
+            <div>
+              <div class="project-index">01 · HAVOC</div>
+              <h2 class="project-title">Cercles de conflagration</h2>
+              <div class="project-type">Application live</div>
+            </div>
+            <span class="project-arrow">↗</span>
+          </div>
+        </a>
+
+        <a class="project project-narrow" href="/solutions/rga" aria-label="Explore spatial analytics project">
+          <img class="project-image" src="https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?auto=format&fit=crop&w=1400&q=85" alt="Dense city viewed from above">
+          <div class="project-meta">
+            <div>
+              <div class="project-index">02 · Risqe RGA</div>
+              <h2 class="project-title">Suivi des indicateurs climatiques</h2>
+              <div class="project-type">Application mensuelle</div>
+            </div>
+            <span class="project-arrow">↗</span>
+          </div>
+        </a>
+
+ 
+      </div>
+    </section>
+
+    <!-- =================================================
+             FOOTER
+             ================================================= -->
+
+        <footer style="
+            margin-top: 100px;
+            padding: 32px 0;
+            border-top: 1px solid var(--color-border);
+        ">
+
+            <div class="flex justify-between items-center gap-4"
+                 style="flex-wrap: wrap;">
+
+                <div>
+
+                    <strong id="workspace_type">
+                       Espace public
+                    </strong>
+
+                    <div id="workspace_name" class="text-small text-secondary">
+                        Démonstration
+                    </div>
+
+                </div>
+
+
+                <div class="text-small text-secondary">
+                    Conçu par <a href="https://kahemka.github.io/">KMK Lab</a>.
+                </div>
+
+            </div>
+
+        </footer>
+  </main>
+</div>
+
