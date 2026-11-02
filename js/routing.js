@@ -63,7 +63,7 @@ async function servePage(section, id_page) {
 
 	const html = await response.text();
 	document.getElementById("content").innerHTML = html;
-	updateInfos();
+	updateInfosLogged();
 	return true;
 }
 
