@@ -153,7 +153,9 @@ async function updateAudience(){
 function pageLoading(){
 	const logged = isLogged();
 	const radical = getTypeOfPages();
-	
+	if (logged){
+		loadLoggedPage(radical);
+	}
 	// Try adding an event listener for the login form
 	try{
 		document.getElementById("login-form").addEventListener("submit", login);
@@ -172,9 +174,7 @@ function pageLoading(){
 		}
 	}
 	
-	if (logged){
-		loadLoggedPage(radical);
-	}
+	
 	
 
 	
