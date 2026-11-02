@@ -375,22 +375,6 @@ function switchLight() {
 }
 
 
-/* ---------------------------------------------------------
-   Session Authentification
-   --------------------------------------------------------- */
-
-
-function setState(value) {
-    sessionStorage.setItem("state", JSON.stringify(value));
-}
-
-function getState() {
-    return JSON.parse(sessionStorage.getItem("state"));
-}
-
-function clearState() {
-    sessionStorage.removeItem("state");
-}
 
 
 /* ---------------------------------------------------------
