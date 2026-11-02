@@ -63,7 +63,7 @@ async function servePage(section, id_page) {
 
 	const html = await response.text();
 	document.getElementById("content").innerHTML = html;
-
+	updateInfos();
 	return true;
 }
 
@@ -138,7 +138,6 @@ async function loadLoggedPage(radical){
 		console.log(result);
 	}
 	
-	updateInfos();
 }
 
 
