@@ -129,44 +129,65 @@ async function loadLoggedPage(radical){
 	
 }
 
+async function changeAudience(audience) {
 
-async function updateAudience(){
-	if (Object.hasOwn(sessionStorage,"state")){
-	
-		const state = getState();
-		if (state.user != undefined){
-		
-			
-			
-			
-			document.getElementById("workspace_name").innerHTML = state.user.email;
-			if (state.memberships.length>1){
-			let iHTML = '<select id="memberships" onchange="pageLoading()">'
-			for (let step=0; step<state.memberships.length;step++){
-				iHTML += `<option>${state.memberships[step].label}</option>`
-			}
-			iHTML += "</select>"
-			document.getElementById("workspace_type").innerHTML = iHTML;
-		}
-			else {
-				document.getElementById("workspace_type").innerHTML = state.memberships[0].label;
-			}
-		
-	
-		
-		}
+    const result = await api("/api/auth/audience", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            site_id: siteId,
+            audience: audience
+        })
+    });
 
-		else {
-			document.getElementById("workspace_name").innerHTML = "Espace public"
-			document.getElementById("workspace_type").innerHTML = "Demonstration"
-		
-		// get standard page
-			
-		}
-	}
-	
+    if (!result.response.ok || !result.data.ok) {
+        return;
+    }
+
+    pageLoading();
 }
 
+async function updateAudience() {
+
+    if (Object.hasOwn(sessionStorage, "state")) {
+
+        const state = getState();
+
+        if (state.user != undefined) {
+
+            document.getElementById("workspace_name").innerHTML = state.user.email;
+
+            if (state.memberships.length > 1) {
+
+                let iHTML = '<select id="memberships" onchange="changeAudience(this.value)">';
+
+				for (let step = 0; step < state.memberships.length; step++) {
+					iHTML += `
+						<option value="${state.memberships[step].audience}">
+							${state.memberships[step].label}
+						</option>
+					`;
+				}
+
+				iHTML += "</select>";
+
+                document.getElementById("workspace_type").innerHTML = iHTML;
+
+            } else if (state.memberships.length === 1) {
+
+                document.getElementById("workspace_type").innerHTML =
+                    state.memberships[0].label;
+            }
+
+        } else {
+
+            document.getElementById("workspace_name").innerHTML = "Espace public";
+            document.getElementById("workspace_type").innerHTML = "Demonstration";
+        }
+    }
+}
 
 function pageLoading(){
 	const logged = isLogged();
