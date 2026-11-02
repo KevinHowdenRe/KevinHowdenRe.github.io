@@ -32,6 +32,7 @@ function getTypeOfPages(){
 		}
 	}
 	catch(error){
+		console.log(error);
 		return "index"
 	}
 }
