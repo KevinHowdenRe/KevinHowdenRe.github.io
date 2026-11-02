@@ -141,7 +141,7 @@ async function updateAudience(){
 			
 			document.getElementById("workspace_name").innerHTML = state.user.email;
 			if (state.memberships.length>1){
-			let iHTML = '<select id="scenario">'
+			let iHTML = '<select id="memberships" onchange="pageLoading()">'
 			for (let step=0; step<state.memberships.length;step++){
 				iHTML += `<option>${state.memberships[step].label}</option>`
 			}
