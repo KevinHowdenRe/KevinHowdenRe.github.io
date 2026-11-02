@@ -72,7 +72,7 @@ function updateInfos(){
 		// Try adding an event listener for the login form
 	try{
 		document.getElementById("login-form").addEventListener("submit", login);
-		
+		console.log("added");
 	}
 
 	catch(error){
