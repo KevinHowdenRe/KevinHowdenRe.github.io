@@ -19,12 +19,12 @@ function getTypeOfPages(){
 	try{
 		
 		const href = window.location.href;
-		const radical = href.split("pages/")[1];
-		const extension = radical.split("/")[1];
+		const radical = href.split(".io/")[1]; // to change if not github.io pages
+		const extension = radical.split("/");
 		console.log(href);
 		console.log(radical);
 		console.log(extension);
-		if (extension == undefined){
+		if (len(extension) < 2){
 			return radical.split(".html")[0]
 		}
 		else{
@@ -35,20 +35,51 @@ function getTypeOfPages(){
 		return "index"
 	}
 }
+
+
+async function servePage(section, id_page) {
+
+	const token = auth.getToken();
+
+	if (!token) {
+		return false;
+	}
+
+	const response = await fetch(
+		AUTH_CONFIG.apiBaseUrl + `/content/HALdev/${section}/${id_page}`,
+		{
+			method: "GET",
+			headers: {
+				"Authorization": `Bearer ${token}`
+			}
+		}
+	);
+
+	if (!response.ok) {
+		console.error("Unable to load page:", response.status);
+		return false;
+	}
+
+	const html = await response.text();
+	document.getElementById("content").innerHTML = html;
+
+	return true;
+}
+
 async function loadUnloggedPage(radical) {
 	
 	if (base_radical.includes(radical)){
 		// load page 
-		const response = await fetch(`./base/${radical}.html`);
-		const html = await response.text();
+		//const response = await fetch(`./base/${radical}.html`);
+		//const html = await response.text();
 
-		const content =  new DOMParser()
-						.parseFromString(html, 'text/html')
-						.body
-						.innerHTML;
+		//const content =  new DOMParser()
+		//				.parseFromString(html, 'text/html')
+		//				.body
+		//				.innerHTML;
 						
-		document.getElementById("content").innerHTML = content;
-		}
+		//document.getElementById("content").innerHTML = content;
+		//}
 	
 	else if (radical=="login"){
 		// do nothing 
@@ -57,14 +88,21 @@ async function loadUnloggedPage(radical) {
 	else{
 		// error 401
 	}
-	
-	
-   
 }
 
-
 async function loadLoggedPage(radical){
-	// to do
+	if (base_radical.includes(radical)){
+		// load radical pages 
+		servePage("root",radical);
+	}
+	else{
+		// should not be login page  so extension pages 
+		// load extension pages
+		const section = radical[0];
+		const id_page = radical[1];
+		servePage(section, id_page);
+		
+	}
 }
 
 
@@ -129,12 +167,10 @@ function pageLoading(){
 	}
 	
 	if (logged){
+		loadLoggedPage(radical);
 	}
 	
-	else{
-		loadUnloggedPage(radical);
-	}
-	
+
 	
 	updateAudience();
 

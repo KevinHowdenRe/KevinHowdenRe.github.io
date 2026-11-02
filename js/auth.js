@@ -310,41 +310,6 @@ const auth = (() => {
             activeAudience: null
         };
     }
-	
-	/* ========================================================
-       SERVE PAGE
-       ======================================================== */
-	
-	async function getPage() {
-
-		const token = getToken();
-
-		if (!token) {
-			return false;
-		}
-
-		const response = await fetch(
-			AUTH_CONFIG.apiBaseUrl + "/content/HALdev/root/home",
-			{
-				method: "GET",
-				headers: {
-					"Authorization": `Bearer ${token}`
-				}
-			}
-		);
-
-		if (!response.ok) {
-			console.error("Unable to load page:", response.status);
-			return false;
-		}
-
-		const html = await response.text();
-		document.getElementById("page_content").innerHTML = html;
-
-		return true;
-	}
-	
-
 
     /* ========================================================
        INIT
