@@ -92,15 +92,15 @@ async function loadUnloggedPage(radical) {
 	
 	if (base_radical.includes(radical)){
 		// load page 
-		//const response = await fetch(`./base/${radical}.html`);
-		//const html = await response.text();
+		const response = await fetch(`./base/${radical}.html`);
+		const html = await response.text();
 
-		//const content =  new DOMParser()
-		//				.parseFromString(html, 'text/html')
-		//				.body
-		//				.innerHTML;
+		const content =  new DOMParser()
+						.parseFromString(html, 'text/html')
+						.body
+						.innerHTML;
 						
-		//document.getElementById("content").innerHTML = content;
+		document.getElementById("content").innerHTML = content;
 		}
 	
 	else if (radical=="login"){
