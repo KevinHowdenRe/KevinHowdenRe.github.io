@@ -68,6 +68,7 @@ async function servePage(section, id_page) {
 }
 
 function updateInfos(){
+	const logged = isLogged();
 		// Try adding an event listener for the login form
 	try{
 		document.getElementById("login-form").addEventListener("submit", login);
