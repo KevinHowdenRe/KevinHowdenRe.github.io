@@ -335,7 +335,6 @@ const auth = (() => {
         getState,
         getToken,
 		clearToken,
-		getPage
     };
 
 })();

@@ -79,7 +79,7 @@ async function loadUnloggedPage(radical) {
 		//				.innerHTML;
 						
 		//document.getElementById("content").innerHTML = content;
-		//}
+		}
 	
 	else if (radical=="login"){
 		// do nothing 
