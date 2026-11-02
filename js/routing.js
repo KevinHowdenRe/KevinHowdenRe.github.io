@@ -131,7 +131,7 @@ async function loadLoggedPage(radical){
 
 async function changeAudience(audience) {
 
-    const result = await api("/api/auth/audience", {
+    const result = await auth.api("/api/auth/audience", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
