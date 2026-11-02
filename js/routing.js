@@ -67,31 +67,24 @@ async function servePage(section, id_page) {
 	return true;
 }
 
-function updateInfos(){
-	const logged = isLogged();
-		// Try adding an event listener for the login form
-	try{
+
+
+
+function updateInfosLogged(){
+	var log_link = document.getElementById("login_link");
+	log_link.innerHTML = "Logout";
+	log_link.href = "javascript:logout();window.location.replace(AUTH_CONFIG.loginUrl);";
+	updateAudience();
+}
+
+
+function updateInfosNotLogged(){
+	const href = window.location.href;
+	const radical = href.split(".io/")[1]; // to change if not github.io pages
+	if (radical == "login.html"){
 		document.getElementById("login-form").addEventListener("submit", login);
 		console.log("added");
 	}
-
-	catch(error){
-		// if raising error : check if is logged 
-		if(logged){
-			// if yes change login link with logout and remove token + state #and onclick come back to home
-			var log_link = document.getElementById("login_link");
-			log_link.innerHTML = "Logout";
-			
-			log_link.href = "javascript:logout();window.location.replace(AUTH_CONFIG.loginUrl);";
-
-		}
-	}
-	
-	
-	
-
-	
-	updateAudience();
 }
 
 
@@ -117,25 +110,21 @@ async function loadUnloggedPage(radical) {
 	else{
 		// error 401
 	}
+	updateInfosNotLogged();
 }
 
 async function loadLoggedPage(radical){
 	console.log("Serving :");
 	if (base_radical.includes(radical)){
 		// load radical pages 
-		console.log(radical);
 		const result = servePage("root",radical);
-		console.log(result);
 	}
 	else{
 		// should not be login page  so extension pages 
 		// load extension pages
 		const section = radical[0];
 		const id_page = radical[1];
-		console.log(section);
-		console.log(id_page);
 		const result = servePage(section, id_page);
-		console.log(result);
 	}
 	
 }
@@ -184,6 +173,9 @@ function pageLoading(){
 	const radical = getTypeOfPages();
 	if (logged){
 		loadLoggedPage(radical);
+	}
+	else{
+		loadUnloggedPage(radical);
 	}
 
 
