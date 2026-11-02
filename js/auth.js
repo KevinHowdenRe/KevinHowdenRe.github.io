@@ -7,7 +7,7 @@
 const AUTH_CONFIG = {
     apiBaseUrl: "https://hrf.pythonanywhere.com",
 	siteUrl : "https://kevinhowdenre.github.io/",
-	loginUrl : "https://kevinhowdenre.github.io/pages/login.html",
+	loginUrl : "https://kevinhowdenre.github.io/login.html",
     siteId: "HALdev",
     tokenKey: "auth_token",
     debug: false

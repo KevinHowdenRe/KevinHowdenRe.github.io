@@ -44,7 +44,7 @@ async function login(event) {
 
 
         // Redirection
-        window.location.href = "../index.html";
+        window.location.href = "./index.html";
 		//update_audience(state);
 
     }
