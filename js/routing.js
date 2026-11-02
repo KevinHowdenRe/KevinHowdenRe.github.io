@@ -67,6 +67,33 @@ async function servePage(section, id_page) {
 	return true;
 }
 
+function updateInfos(){
+		// Try adding an event listener for the login form
+	try{
+		document.getElementById("login-form").addEventListener("submit", login);
+		
+	}
+
+	catch(error){
+		// if raising error : check if is logged 
+		if(logged){
+			// if yes change login link with logout and remove token + state #and onclick come back to home
+			var log_link = document.getElementById("login_link");
+			log_link.innerHTML = "Logout";
+			
+			log_link.href = "javascript:logout();window.location.replace(AUTH_CONFIG.loginUrl);";
+
+		}
+	}
+	
+	
+	
+
+	
+	updateAudience();
+}
+
+
 async function loadUnloggedPage(radical) {
 	
 	if (base_radical.includes(radical)){
@@ -109,6 +136,8 @@ async function loadLoggedPage(radical){
 		const result = servePage(section, id_page);
 		console.log(result);
 	}
+	
+	updateInfos();
 }
 
 
@@ -156,29 +185,7 @@ function pageLoading(){
 	if (logged){
 		loadLoggedPage(radical);
 	}
-	// Try adding an event listener for the login form
-	try{
-		document.getElementById("login-form").addEventListener("submit", login);
-		
-	}
 
-	catch(error){
-		// if raising error : check if is logged 
-		if(logged){
-			// if yes change login link with logout and remove token + state #and onclick come back to home
-			var log_link = document.getElementById("login_link");
-			log_link.innerHTML = "Logout";
-			
-			log_link.href = "javascript:logout();window.location.replace(AUTH_CONFIG.loginUrl);";
-
-		}
-	}
-	
-	
-	
-
-	
-	updateAudience();
 
 }
 
