@@ -24,7 +24,7 @@ function getTypeOfPages(){
 		console.log(href);
 		console.log(radical);
 		console.log(extension);
-		if (len(extension) < 2){
+		if (extension.length < 2){
 			return radical.split(".html")[0]
 		}
 		else{
