@@ -137,7 +137,7 @@ async function changeAudience(audience) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            site_id: siteId,
+            site_id: AUTH_CONFIG.siteId,
             audience: audience
         })
     });
@@ -145,7 +145,9 @@ async function changeAudience(audience) {
     if (!result.response.ok || !result.data.ok) {
         return;
     }
-
+	let state = getState();
+	state.activeAudience = audience;
+	setState(state);
     pageLoading();
 }
 
