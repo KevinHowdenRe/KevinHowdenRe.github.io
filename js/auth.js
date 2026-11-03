@@ -134,7 +134,7 @@ const auth = (() => {
 
         await refresh();
 		const currentState = getState()
-		console.log(sessionStorage)
+		//console.log(sessionStorage)
         if (!currentState.loggedIn) {
             clearToken();
 
@@ -151,7 +151,7 @@ const auth = (() => {
         ) {
             analytics.track("login");
         }
-		console.log(getState());
+		//console.log(getState());
 		
         //return getState();
     }
@@ -240,7 +240,7 @@ const auth = (() => {
             };
 	
 			setState(state);
-			console.log(sessionStorage);
+			//console.log(sessionStorage);
         }
         catch (error) {
 

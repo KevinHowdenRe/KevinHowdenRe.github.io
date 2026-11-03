@@ -1,0 +1,107 @@
+<div class="app">
+    <header class="header">
+      <a class="header-brand" href="#">Reinsurance Lab</a>
+      <nav class="header-nav" aria-label="Navigation principale">
+        <a class="active" href="#configuration">Programme</a>
+        <a href="#charges">Charges</a>
+        <a href="#payout">Payout</a>
+      </nav>
+    </header>
+
+    <main class="page reinsurance-page">
+      <div class="workspace-header">
+        <div>
+          <span class="badge">Treaty workspace</span>
+          <h1 class="page-title mt-4">Programme de réassurance</h1>
+          <p class="page-description">Construire l'architecture des traités, connecter ensuite les charges, puis analyser les recoveries et le net.</p>
+        </div>
+      </div>
+
+      <nav class="section-nav" aria-label="Sections du modèle">
+        <a class="btn btn-primary btn-sm" href="#configuration">01 Configuration traité</a>
+        <a class="btn btn-secondary btn-sm" href="#charges">02 Charges</a>
+        <a class="btn btn-secondary btn-sm" href="#payout">03 Payout</a>
+      </nav>
+
+      <section id="configuration" class="workspace-section">
+        <div class="section-heading">
+          <div>
+            <h2>Configuration traité</h2>
+            <p class="text-secondary">Une ligne représente un programme. Les composants sont appliqués de gauche à droite.</p>
+          </div>
+        </div>
+
+        <div class="builder-shell" id="program-builder">
+          <div class="builder-toolbar">
+            <div class="builder-toolbar-left">
+              <button class="btn btn-primary btn-sm" id="add-program" type="button">+ Ajouter un programme</button>
+              <button class="btn btn-secondary btn-sm" id="add-component" type="button">+ Ajouter un composant</button>
+            </div>
+            <div class="builder-toolbar-right">
+              <span class="badge">Ordre d'application →</span>
+            </div>
+          </div>
+
+          <div class="programs-viewport" aria-label="Programmes de réassurance">
+            <div class="programs-canvas" id="programs-canvas">
+              <article class="program-row" data-program-id="program-1">
+                <div class="program-label">
+                  <strong>Programme 1</strong>
+                  <span class="text-small text-secondary">Architecture principale</span>
+                </div>
+                <div class="program-components" data-components-for="program-1">
+                  <div class="component-card component-card-placeholder">
+                    <div>
+                      <strong>Aucun composant</strong>
+                      <div class="text-small mt-4">Quota Share, Surplus, Per Risk XL, Occurrence XL, Aggregate XL…</div>
+                    </div>
+                  </div>
+                  <div class="add-component-slot">
+                    <button class="btn btn-secondary btn-sm" type="button">+ Composant</button>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <hr class="divider">
+
+      <section id="charges" class="workspace-section">
+        <div class="section-heading">
+          <div>
+            <h2>Charges</h2>
+            <p class="text-secondary">Pertes historiques, scénarios manuels ou outputs de simulations.</p>
+          </div>
+          <span class="badge">À venir</span>
+        </div>
+        <div class="placeholder-panel">
+          <div>
+            <strong>Loss data workspace</strong>
+            Les données de pertes seront connectées au programme configuré ci-dessus sans modifier son architecture contractuelle.
+          </div>
+        </div>
+      </section>
+
+      <hr class="divider">
+
+      <section id="payout" class="workspace-section">
+        <div class="section-heading">
+          <div>
+            <h2>Payout</h2>
+            <p class="text-secondary">Recoveries, pertes nettes, traces d'exécution et visualisations.</p>
+          </div>
+          <span class="badge">À venir</span>
+        </div>
+        <div class="placeholder-panel">
+          <div>
+            <strong>Results &amp; payout workspace</strong>
+            Les graphiques et résultats utiliseront le même data model : charges → composants ordonnés → recoveries → net.
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+<!-- Core JS -->
+<script src="./js/base.js"></script>

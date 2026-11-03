@@ -60,7 +60,7 @@ async function servePage(section, id_page) {
 
 	const html = await response.text();
 	document.getElementById("content").innerHTML = html;
-	console.log("Page retrieved");
+	//console.log("Page retrieved");
 	updateInfosLogged();
 	return true;
 }
@@ -81,7 +81,6 @@ function updateInfosNotLogged(){
 	const radical = href.split(".io/")[1]; // to change if not github.io pages
 	if (radical == "login.html"){
 		document.getElementById("login-form").addEventListener("submit", login);
-		console.log("added");
 	}
 }
 
@@ -107,12 +106,27 @@ async function loadUnloggedPage(radical) {
 	
 	else{
 		// error 401
+		
+		const section = radical[0];
+		const id_page = radical[1].split("#")[1];
+		
+		const response = await fetch(`./${section}/${id_page}.html`);
+		const html = await response.text();
+
+		const content =  new DOMParser()
+						.parseFromString(html, 'text/html')
+						.body
+						.innerHTML;
+						
+		document.getElementById("content").innerHTML = content;
+		
+		
 	}
 	updateInfosNotLogged();
 }
 
 async function loadLoggedPage(radical){
-	console.log("Serving :");
+	//console.log("Serving :");
 	if (base_radical.includes(radical)){
 		// load radical pages 
 		const result = servePage("root",radical);
@@ -121,7 +135,7 @@ async function loadLoggedPage(radical){
 		// should not be login page  so extension pages 
 		// load extension pages
 		const section = radical[0];
-		const id_page = radical[1];
+		const id_page = radical[1].split("#")[1];
 		const result = servePage(section, id_page);
 	}
 	
@@ -143,13 +157,13 @@ async function changeAudience(audience) {
     if (!result.response.ok || !result.data.ok) {
         return;
     }
-	console.log(".......")
-	console.log("IS ACTIVATED")
+	//console.log(".......")
+	//console.log("IS ACTIVATED")
 	let state = getState();
-	console.log(state.activeAudience);
+	//console.log(state.activeAudience);
 	state.activeAudience = audience;
 	setState(state);
-	console.log(".......")
+	//console.log(".......")
     pageLoading();
 }
 
@@ -207,11 +221,11 @@ function pageLoading(){
 	const logged = isLogged();
 	const radical = getTypeOfPages();
 	if (logged){
-		console.log("loading a private page");
+		//console.log("loading a private page");
 		loadLoggedPage(radical);
 	}
 	else{
-		console.log("loading a public page");
+		//console.log("loading a public page");
 		loadUnloggedPage(radical);
 	}
 
