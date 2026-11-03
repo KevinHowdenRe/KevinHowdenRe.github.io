@@ -75,12 +75,9 @@ const auth = (() => {
 
         const headers = new Headers(options.headers || {});
         const token = getToken();
-		console.log(token);
         if (token) {
             headers.set("Authorization", `Bearer ${token}`);
         }
-		console.log(headers.get("Authorization"));
-		console.log(AUTH_CONFIG.apiBaseUrl + path);
         const response = await fetch(
             AUTH_CONFIG.apiBaseUrl + path,
             {

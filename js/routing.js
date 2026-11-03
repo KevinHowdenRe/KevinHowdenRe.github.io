@@ -21,9 +21,6 @@ function getTypeOfPages(){
 		const href = window.location.href;
 		const radical = href.split(".io/")[1]; // to change if not github.io pages
 		const extension = radical.split("/");
-		console.log(href);
-		console.log(radical);
-		console.log(extension);
 		if (extension.length < 2){
 			return radical.split(".html")[0]
 		}
@@ -63,6 +60,7 @@ async function servePage(section, id_page) {
 
 	const html = await response.text();
 	document.getElementById("content").innerHTML = html;
+	console.log("Page retrieved");
 	updateInfosLogged();
 	return true;
 }
@@ -145,10 +143,24 @@ async function changeAudience(audience) {
     if (!result.response.ok || !result.data.ok) {
         return;
     }
+	console.log(".......")
+	console.log("IS ACTIVATED")
 	let state = getState();
+	console.log(state.activeAudience);
 	state.activeAudience = audience;
 	setState(state);
+	console.log(".......")
     pageLoading();
+}
+
+function setSelectDd(dd_id, dd_value){
+	var dropdown = document.getElementById(dd_id);
+	for (var i = 0; i < dropdown.options.length; i++) {
+		if (dropdown.options[i].value === dd_value) {
+			dropdown.options[i].selected = true;
+			break;
+		}
+	}
 }
 
 async function updateAudience() {
@@ -176,7 +188,7 @@ async function updateAudience() {
 				iHTML += "</select>";
 
                 document.getElementById("workspace_type").innerHTML = iHTML;
-
+				setSelectDd("memberships",state.activeAudience);
             } else if (state.memberships.length === 1) {
 
                 document.getElementById("workspace_type").innerHTML =
@@ -195,9 +207,11 @@ function pageLoading(){
 	const logged = isLogged();
 	const radical = getTypeOfPages();
 	if (logged){
+		console.log("loading a private page");
 		loadLoggedPage(radical);
 	}
 	else{
+		console.log("loading a public page");
 		loadUnloggedPage(radical);
 	}
 
