@@ -107,10 +107,10 @@ async function loadUnloggedPage(radical) {
 	else{
 		// error 401
 		
-		const section = radical[0];
+	
 		const id_page = radical[1].split("#")[1];
 		
-		const response = await fetch(`./${section}/${id_page}.html`);
+		const response = await fetch(`./${id_page}.html`);
 		const html = await response.text();
 
 		const content =  new DOMParser()
