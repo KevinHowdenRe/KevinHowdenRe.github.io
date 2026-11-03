@@ -1,12 +1,60 @@
+
+
+
+
+
+
+
+
 <div class="app">
+
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
     <header class="header">
-      <a class="header-brand" href="#">Reinsurance Lab</a>
-      <nav class="header-nav" aria-label="Navigation principale">
-        <a class="active" href="#configuration">Programme</a>
-        <a href="#charges">Charges</a>
-        <a href="#payout">Payout</a>
-      </nav>
+
+        <a href="index.html"
+           class="header-brand">
+            HAL
+        </a>
+
+
+        <nav class="header-nav">
+
+            <a href="index.html" class="active">
+                Accueil
+            </a>
+			
+			<a href="articles.html" class="active">
+                Articles
+            </a>
+
+          
+            <a href="documentation.html" class="active">
+                Documentation
+            </a>
+                
+            <a href="solutions.html" class="active">
+                Solutions
+            </a>
+			
+			
+			<a id="login_link" href="login.html" class="active">
+                 Login
+            </a>
+			
+			<button onclick="switchLight()" id="interrupteur" class="theme-toggle" id="theme-toggle" aria-label="Switch theme">
+    ☾ 
+</button>
+
+
+        </nav>
+
     </header>
+
+
 
     <main class="page reinsurance-page">
       <div class="workspace-header">
@@ -105,3 +153,5 @@
   </div>
 <!-- Core JS -->
 <script src="../js/base.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/component.js"></script>
