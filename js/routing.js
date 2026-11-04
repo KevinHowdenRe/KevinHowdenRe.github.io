@@ -69,7 +69,7 @@ async function injectScript(tag_scripts){
     }
 }
 
-async function servePage(section, id_page) {
+async function servePage(section, id_page, tag_scripts) {
 
 	const token = auth.getToken();
 
@@ -95,7 +95,7 @@ async function servePage(section, id_page) {
 	const html = await response.text();
 	document.getElementById("content").innerHTML = html;
 	
-	
+	injectScript(tag_scripts)
 	
 
 	updateInfosLogged();
@@ -170,14 +170,14 @@ async function loadLoggedPage(radical){
 	//console.log("Serving :");
 	if (base_radical.includes(radical)){
 		// load radical pages 
-		const result = servePage("root",radical);
+		const result = servePage("root",radical,"data-scripts");
 	}
 	else{
 		// should not be login page  so extension pages 
 		// load extension pages
 		const section = radical[0];
 		const id_page = radical[1].split("#")[1];
-		const result = servePage(section, id_page);
+		const result = servePage(section, id_page,"data-scripts");
 	}
 	
 }
