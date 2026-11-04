@@ -33,7 +33,41 @@ function getTypeOfPages(){
 		return "index"
 	}
 }
+function loadScript(src) {
 
+    return new Promise((resolve, reject) => {
+
+        // Already loaded
+        if (document.querySelector(`script[src="${src}"]`)) {
+            resolve();
+            return;
+        }
+
+        const script = document.createElement("script");
+
+        script.src = src;
+        script.onload = resolve;
+        script.onerror = () =>
+            reject(new Error(`Failed to load script: ${src}`));
+
+        document.head.appendChild(script);
+    });
+}
+async function injectScript(tag_scripts){
+	const scriptContainer = content.querySelector(`[${tag_scripts}]`);
+
+    if (!scriptContainer) return;
+
+    const scripts = scriptContainer.dataset.scripts
+        .split(",")
+        .map(src => src.trim())
+        .filter(Boolean);
+
+    // 4. Load them
+    for (const src of scripts) {
+        await loadScript(src);
+    }
+}
 
 async function servePage(section, id_page) {
 
@@ -60,11 +94,33 @@ async function servePage(section, id_page) {
 
 	const html = await response.text();
 	document.getElementById("content").innerHTML = html;
-	//console.log("Page retrieved");
+	
+	
+	
+
 	updateInfosLogged();
 	return true;
 }
 
+
+
+
+async function serveLocalPage(localPath, tag_html, tag_scripts){
+	
+	const response = await fetch(localPath);
+	const html = await response.text();
+
+	const content =  new DOMParser()
+					.parseFromString(html, 'text/html')
+					.body
+					.innerHTML;
+					
+	document.getElementById(tag_html).innerHTML = content; 
+	
+	injectScript(tag_scripts)
+
+		
+}
 
 
 
@@ -88,16 +144,8 @@ function updateInfosNotLogged(){
 async function loadUnloggedPage(radical) {
 	
 	if (base_radical.includes(radical)){
-		// load page 
-		const response = await fetch(`./base/${radical}.html`);
-		const html = await response.text();
-
-		const content =  new DOMParser()
-						.parseFromString(html, 'text/html')
-						.body
-						.innerHTML;
-						
-		document.getElementById("content").innerHTML = content;
+		const localPath = `./base/${radical}.html`
+		serveLocalPage(localPath, "content", "data-scripts")
 		}
 	
 	else if (radical=="login"){
@@ -110,15 +158,8 @@ async function loadUnloggedPage(radical) {
 	
 		const id_page = radical[1].split("#")[1];
 		
-		const response = await fetch(`./${id_page}.html`);
-		const html = await response.text();
-
-		const content =  new DOMParser()
-						.parseFromString(html, 'text/html')
-						.body
-						.innerHTML;
-						
-		document.getElementById("content").innerHTML = content;
+		const localPath = `./${id_page}.html`
+		serveLocalPage(localPath, "content", "data-scripts")
 		
 		
 	}
@@ -140,6 +181,7 @@ async function loadLoggedPage(radical){
 	}
 	
 }
+
 
 async function changeAudience(audience) {
 
