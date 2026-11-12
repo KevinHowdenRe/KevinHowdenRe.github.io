@@ -195,22 +195,36 @@
 	
 	function setInitialData(data, source) {
 
-		STATE.data.initial =
-			data;
+    // Clean previous portfolio/application state
+
+    fullReset();
 
 
-		// No geographic selection:
-		// the selected portfolio is the complete portfolio.
+    // Store new portfolio
 
-		STATE.selected.data =
-			data.slice();
-		fullReset();
+    STATE.data.initial = data;
 
-		updateAnalysisStatus(
-			`${data.length.toLocaleString("fr-FR")} polices chargées`
-		);
 
-	}
+    // No geographic selection yet:
+    // selected portfolio = complete portfolio
+
+    STATE.selected.data = data.slice();
+
+
+    // Store source information
+
+    STATE.source.fileName = source.fileName;
+
+    STATE.source.fileType = source.fileType;
+
+    STATE.source.loadedAt = new Date();
+
+
+    updateAnalysisStatus(
+        `${data.length.toLocaleString("fr-FR")} polices chargées`
+    );
+
+}
 	
 	function createEmptyResults() {
 
