@@ -261,9 +261,6 @@
     }
 
 
-    window.addEventListener(
-        "DOMContentLoaded",
-        boot
-    );
+	boot();
 
 })();
