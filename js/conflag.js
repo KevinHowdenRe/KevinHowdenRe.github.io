@@ -122,8 +122,7 @@
 
 
 			setInitialData(
-				loaded.data,
-				loaded
+				loaded.data
 			);
 
 
@@ -193,7 +192,7 @@
 
 	}
 	
-	function setInitialData(data, source) {
+	function setInitialData(data) {
 
     // Clean previous portfolio/application state
 
