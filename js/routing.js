@@ -87,6 +87,17 @@ async function servePage(section, id_page, tag_scripts) {
 		}
 	);
 
+	if (response.status === 401) {
+		// Token exists locally, but backend says it is no longer valid
+		logout();
+
+		// Serve the public/local version instead
+		const radical = getTypeOfPages();
+		await loadUnloggedPage(radical);
+
+		return false;
+	}
+
 	if (!response.ok) {
 		console.error("Unable to load page:", response.status);
 		return false;
@@ -170,14 +181,14 @@ async function loadLoggedPage(radical){
 	//console.log("Serving :");
 	if (base_radical.includes(radical)){
 		// load radical pages 
-		const result = servePage("root",radical,"data-scripts");
+		const result = await servePage("root",radical,"data-scripts");
 	}
 	else{
 		// should not be login page  so extension pages 
 		// load extension pages
 		const section = radical[0];
 		const id_page = radical[1].split("#")[1];
-		const result = servePage(section, id_page,"data-scripts");
+		const result = await servePage(section, id_page,"data-scripts");
 	}
 	
 }
@@ -259,7 +270,7 @@ async function updateAudience() {
     }
 }
 
-function pageLoading(){
+async function pageLoading(){
 	const logged = isLogged();
 	const radical = getTypeOfPages();
 	if (logged){
