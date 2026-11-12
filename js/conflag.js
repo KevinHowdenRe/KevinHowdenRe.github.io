@@ -122,7 +122,8 @@
 
 
 			setInitialData(
-				loaded.data
+				loaded.data,
+				loaded
 			);
 
 
@@ -144,86 +145,69 @@
 		}
 
 	}
+
 	
-	function fullReset() {
+	function setInitialData(data, source) {
 
-		// Reset data
-
-		STATE.data.initial = [];
-
-		STATE.selected.data = [];
+		STATE.data.initial =
+			data;
 
 
-		// Reset results
+		// No geographic selection:
+		// the selected portfolio is the complete portfolio.
+
+		STATE.selected.data =
+			data.slice();
+
+
+		// A new portfolio invalidates previous results.
 
 		resetResults();
-
 		renderTable();
 
+		// Reset geographic selection.
 
-		// Reset geographic selection
-
-		STATE.selection.active = false;
-
-		STATE.selection.geometry = null;
-
-		STATE.selection.policyIds = [];
+		STATE.selection.active =
+			false;
 
 
-		// Reset source
-
-		STATE.source.fileName = null;
-
-		STATE.source.fileType = null;
-
-		STATE.source.loadedAt = null;
+		STATE.selection.geometry =
+			null;
 
 
-		// Reset analysis metadata
+		STATE.selection.policyIds =
+			[];
 
-		STATE.analysis.parameters = null;
 
-		STATE.analysis.lastRunAt = null;
+		// Store source information.
+
+		STATE.source.fileName =
+			source.fileName;
+
+
+		STATE.source.fileType =
+			source.fileType;
+
+
+		STATE.source.loadedAt =
+			new Date();
+
+
+		// Reset analysis metadata.
+
+		STATE.analysis.parameters =
+			null;
+
+
+		STATE.analysis.lastRunAt =
+			null;
 
 
 		updateAnalysisStatus(
-			"En attente de données"
+			`${data.length.toLocaleString("fr-FR")} polices chargées`
 		);
 
 	}
-	
-	function setInitialData(data) {
-
-    // Clean previous portfolio/application state
-
-    fullReset();
-
-
-    // Store new portfolio
-
-    STATE.data.initial = data;
-
-
-    // No geographic selection yet:
-    // selected portfolio = complete portfolio
-
-    STATE.selected.data = data.slice();
-
-
-    // Store source information
-
-    STATE.source.fileName = source.fileName;
-
-    STATE.source.fileType = source.fileType;
-
-    STATE.source.loadedAt = new Date();
-
-
-    updateAnalysisStatus(
-        `${data.length.toLocaleString("fr-FR")} polices chargées`
-    );
-
-}
 	
 	function createEmptyResults() {
 
@@ -1386,7 +1370,7 @@
 		.querySelector("#btnReset")
 		?.addEventListener(
 			"click",
-			fullReset
+			resetResults
 		);
 			
 		
