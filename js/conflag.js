@@ -1,8 +1,178 @@
 (() => {
 
     "use strict";
+	
+	
+	// =====================================================
+	// APPLICATION STATE
+	// =====================================================
+
+	const STATE = {
+
+		data: {
+
+			initial: [],
+
+			results: []
+
+		},
 
 
+		selected: {
+
+			data: [],
+
+			results: []
+
+		},
+
+
+		selection: {
+
+			active: false,
+
+			geometry: null,
+
+			policyIds: []
+
+		},
+
+
+		source: {
+
+			fileName: null,
+
+			fileType: null,
+
+			loadedAt: null
+
+		}
+
+	};
+	
+	// =====================================================
+	// DATA SCHEMA
+	// =====================================================
+
+	const DATA_SCHEMA = {
+
+		requiredColumns: [
+			"policy_id",
+			"latitude",
+			"longitude",
+			"sum_insured"
+		]
+
+	};
+	// =====================================================
+	// DATA LOADING
+	// =====================================================
+
+	async function handleFileLoad(event) {
+
+		const file =
+			event.target.files?.[0];
+
+
+		if (!file) {
+			return;
+		}
+
+
+		const status =
+			document.querySelector("#fileStatus");
+
+
+		try {
+
+			status.textContent =
+				"Chargement...";
+
+
+			const loaded =
+				await FileLoader.load(
+					file,
+					DATA_SCHEMA
+				);
+
+
+			setInitialData(
+				loaded.data,
+				loaded
+			);
+
+
+			status.textContent =
+				`${loaded.fileName} — ${loaded.data.length.toLocaleString("fr-FR")} lignes`;
+
+
+			console.log("STATE", STATE);
+
+		}
+		catch (error) {
+
+			status.textContent =
+				error.message;
+
+
+			event.target.value = "";
+
+		}
+
+	}
+	
+	function setInitialData(data, source) {
+
+		STATE.data.initial =
+			data;
+
+
+		// No polygon selection yet:
+		// selected data = complete portfolio
+
+		STATE.selected.data =
+			data.slice();
+
+
+		// Loading a new portfolio invalidates
+		// previous results
+
+		STATE.data.results =
+			[];
+
+
+		STATE.selected.results =
+			[];
+
+
+		// Reset selection
+
+		STATE.selection.active =
+			false;
+
+
+		STATE.selection.geometry =
+			null;
+
+
+		STATE.selection.policyIds =
+			[];
+
+
+		// Store source information
+
+		STATE.source.fileName =
+			source.fileName;
+
+
+		STATE.source.fileType =
+			source.fileType;
+
+
+		STATE.source.loadedAt =
+			new Date();
+
+	}
     // =====================================================
     // MOCK DATA
     // =====================================================
@@ -316,7 +486,12 @@
 
     initResponsiveLayout();
 
-
+	document
+        .querySelector("#portfolio-file")
+        ?.addEventListener(
+            "change",
+            handleFileLoad
+        );
     document
         .querySelector("#btnRun")
         ?.addEventListener(
