@@ -49,15 +49,6 @@
 		},
 
 
-		source: {
-
-			fileName: null,
-
-			fileType: null,
-
-			loadedAt: null
-
-		},
 
 
 		analysis: {
@@ -120,10 +111,9 @@
 					DATA_SCHEMA
 				);
 
-
+			console.log(loaded);
 			setInitialData(
 				loaded.data,
-				loaded
 			);
 
 
@@ -135,7 +125,7 @@
 
 		}
 		catch (error) {
-
+			console.log("what");
 			status.textContent =
 				error.message;
 
@@ -147,7 +137,7 @@
 	}
 
 	
-	function setInitialData(data, source) {
+	function setInitialData(data) {
 
 		STATE.data.initial =
 			data;
@@ -178,19 +168,6 @@
 		STATE.selection.policyIds =
 			[];
 
-
-		// Store source information.
-
-		//STATE.source.fileName =
-		//	source.fileName;
-
-
-		//STATE.source.fileType =
-		//	source.fileType;
-
-
-		//STATE.source.loadedAt =
-		//	new Date();
 
 
 		// Reset analysis metadata.
