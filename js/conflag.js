@@ -2,7 +2,6 @@
 
     "use strict";
 	
-	
 	// =====================================================
 	// APPLICATION STATE
 	// =====================================================
@@ -13,7 +12,13 @@
 
 			initial: [],
 
-			results: []
+			results: {
+
+				clusters: [],
+
+				pointsInClusters: []
+
+			}
 
 		},
 
@@ -22,7 +27,13 @@
 
 			data: [],
 
-			results: []
+			results: {
+
+				clusters: [],
+
+				pointsInClusters: []
+
+			}
 
 		},
 
@@ -46,6 +57,15 @@
 
 			loadedAt: null
 
+		},
+
+
+		analysis: {
+
+			parameters: null,
+
+			lastRunAt: null
+
 		}
 
 	};
@@ -57,13 +77,18 @@
 	const DATA_SCHEMA = {
 
 		requiredColumns: [
-			"policy_id",
-			"latitude",
-			"longitude",
-			"sum_insured"
+			"id_policy",
+			"Latitude",
+			"Longitude",
+			"SI"
+		],
+
+		optionalColumns: [
+			"Localisation"
 		]
 
 	};
+
 	// =====================================================
 	// DATA LOADING
 	// =====================================================
@@ -127,25 +152,19 @@
 			data;
 
 
-		// No polygon selection yet:
-		// selected data = complete portfolio
+		// No geographic selection:
+		// the selected portfolio is the complete portfolio.
 
 		STATE.selected.data =
 			data.slice();
 
 
-		// Loading a new portfolio invalidates
-		// previous results
+		// A new portfolio invalidates previous results.
 
-		STATE.data.results =
-			[];
+		resetResults();
 
 
-		STATE.selected.results =
-			[];
-
-
-		// Reset selection
+		// Reset geographic selection.
 
 		STATE.selection.active =
 			false;
@@ -159,7 +178,7 @@
 			[];
 
 
-		// Store source information
+		// Store source information.
 
 		STATE.source.fileName =
 			source.fileName;
@@ -172,7 +191,124 @@
 		STATE.source.loadedAt =
 			new Date();
 
+
+		// Reset analysis metadata.
+
+		STATE.analysis.parameters =
+			null;
+
+
+		STATE.analysis.lastRunAt =
+			null;
+
+
+		updateAnalysisStatus(
+			`${data.length.toLocaleString("fr-FR")} polices chargées`
+		);
+
 	}
+	
+	function resetResults() {
+
+		STATE.data.results = {
+
+			clusters: [],
+
+			pointsInClusters: []
+
+		};
+
+
+		STATE.selected.results = {
+
+			clusters: [],
+
+			pointsInClusters: []
+
+		};
+
+	}
+	
+	// =====================================================
+	// ANALYSIS PARAMETERS
+	// =====================================================
+
+	function getAnalysisParameters() {
+
+		const radius =
+			Number(
+				document.querySelector("#radius")?.value
+			);
+
+
+		const threshold =
+			Number(
+				1000000*document.querySelector("#minSI")?.value
+			);
+
+
+		const gridStep =
+			Number(
+				document.querySelector("#gridStep")?.value
+			);
+
+
+		const zoneSize =
+			Number(
+				document.querySelector("#zoneSize")?.value
+			);
+
+
+		if (!Number.isFinite(radius) || radius <= 0) {
+
+			throw new Error(
+				"Le rayon doit être supérieur à zéro."
+			);
+
+		}
+
+
+		if (!Number.isFinite(threshold) || threshold < 0) {
+
+			throw new Error(
+				"La somme assurée minimum doit être positive."
+			);
+
+		}
+
+
+		if (!Number.isFinite(gridStep) || gridStep <= 0) {
+
+			throw new Error(
+				"Le pas de recherche doit être supérieur à zéro."
+			);
+
+		}
+
+
+		if (![9, 25].includes(zoneSize)) {
+
+			throw new Error(
+				"La zone de recherche doit contenir 9 ou 25 cellules."
+			);
+
+		}
+
+
+		return {
+
+			radius,
+
+			threshold,
+
+			gridStep,
+
+			zoneSize
+
+		};
+
+	}
+
     // =====================================================
     // MOCK DATA
     // =====================================================
@@ -393,21 +529,252 @@
     // DEMO ACTION
     // =====================================================
 
-    function runDemo() {
+    // =====================================================
+	// CONFLAGRATION ANALYSIS
+	// =====================================================
 
-        const status =
-            document.querySelector("#analysisStatus");
+	async function runAnalysis() {
 
-
-        status.textContent =
-            `${demoClusters.length} cercles détectés`;
-
-        status.classList.add("badge-success");
+		const button =
+			document.querySelector("#btnRun");
 
 
-        renderTable();
+		try {
 
-    }
+			if (!STATE.selected.data.length) {
+
+				throw new Error(
+					"Chargez un portefeuille avant de lancer l'analyse."
+				);
+
+			}
+
+
+			if (typeof runSquaresGrid !== "function") {
+
+				throw new Error(
+					"Le moteur ConflagGrid n'est pas chargé."
+				);
+
+			}
+
+
+			const parameters =
+				getAnalysisParameters();
+
+
+			button.disabled =
+				true;
+
+
+			button.textContent =
+				"Analyse en cours...";
+
+
+			updateAnalysisStatus(
+				"Calcul en cours..."
+			);
+
+
+			// Allow the browser to display the loading state
+			// before starting the synchronous calculation.
+
+			await new Promise(resolve =>
+				setTimeout(resolve, 0)
+			);
+
+
+			const rawResult =
+				runSquaresGrid(
+
+					JSON.stringify(
+						STATE.selected.data
+					),
+
+					parameters.radius,
+
+					parameters.threshold,
+
+					parameters.gridStep,
+
+					parameters.zoneSize
+
+				);
+
+
+			const parsedResult =
+				JSON.parse(rawResult);
+
+
+			if (!parsedResult.ok) {
+
+				throw new Error(
+					parsedResult.error ||
+					"Erreur pendant l'analyse."
+				);
+
+			}
+
+
+			storeAnalysisResults(
+				parsedResult,
+				parameters
+			);
+
+
+			updateAnalysisStatus(
+				`${STATE.selected.results.clusters.length.toLocaleString("fr-FR")} cercles détectés`
+			);
+
+
+			console.log(
+				"Conflagration results",
+				STATE.selected.results
+			);
+
+		}
+		catch (error) {
+
+			resetResults();
+
+
+			updateAnalysisStatus(
+				error.message,
+				true
+			);
+
+
+			console.error(
+				"Conflagration analysis error:",
+				error
+			);
+
+		}
+		finally {
+
+			button.disabled =
+				false;
+
+
+			button.textContent =
+				"Lancer la détection";
+
+		}
+
+	}
+	
+	function storeAnalysisResults(
+		algorithmResult,
+		parameters
+	) {
+
+		const clusters =
+			Array.isArray(algorithmResult.clusters)
+				? algorithmResult.clusters
+				: [];
+
+
+		const pointsInClusters =
+			Array.isArray(
+				algorithmResult.points_in_clusters
+			)
+				? algorithmResult.points_in_clusters
+				: [];
+
+
+		const normalizedResults = {
+
+			clusters: clusters.map(
+				(cluster, index) => ({
+
+					...cluster,
+
+					rank: index + 1
+
+				})
+			),
+
+			pointsInClusters
+
+		};
+
+		// The algorithm was applied to selected data,
+		// so the result is immediately the selected result.
+
+		STATE.selected.results =
+			normalizedResults;
+
+
+		// When no polygon selection is active,
+		// selected data represents the complete portfolio.
+		// Therefore selected results are also global results.
+
+		if (!STATE.selection.active) {
+
+			STATE.data.results = {
+
+				clusters:
+					normalizedResults.clusters.slice(),
+
+				pointsInClusters:
+					normalizedResults.pointsInClusters.slice()
+
+			};
+
+		}
+
+
+		STATE.analysis.parameters = {
+
+			radius: parameters.radius,
+
+			threshold: parameters.threshold,
+
+			gridStep: parameters.gridStep,
+
+			zoneSize: parameters.zoneSize
+
+		};
+
+
+		STATE.analysis.lastRunAt =
+			new Date();
+
+	}
+	// =====================================================
+	// STATUS
+	// =====================================================
+
+	function updateAnalysisStatus(
+		message,
+		isError = false
+	) {
+
+		const status =
+			document.querySelector("#fileStatus");
+
+
+		if (!status) {
+			return;
+		}
+
+
+		status.textContent =
+			message;
+
+
+		status.classList.toggle(
+			"badge-error",
+			isError
+		);
+
+
+		status.classList.toggle(
+			"badge-success",
+			!isError
+		);
+
+	}
 	// =====================================================
 	// RESPONSIVE CONFIGURATION
 	// =====================================================
@@ -493,11 +860,11 @@
             handleFileLoad
         );
     document
-        .querySelector("#btnRun")
-        ?.addEventListener(
-            "click",
-            runDemo
-        );
+		.querySelector("#btnRun")
+		?.addEventListener(
+			"click",
+			runAnalysis
+		);
 
 }
 

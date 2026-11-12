@@ -156,13 +156,13 @@
                 <div class="form-group">
 
                     <label for="minSI">
-                        Somme assurée minimum
+                        Cluster TSI min (mio €)
                     </label>
 
                     <input
                         id="minSI"
                         type="number"
-                        value="100000000"
+                        value="100"
                         min="0"
                     >
 
@@ -171,18 +171,49 @@
 
                 <div class="form-group">
 
-                    <label for="topN">
-                        Nombre maximum de cercles
-                    </label>
+				<label for="gridStep">
+					Pas de recherche
+				</label>
 
-                    <input
-                        id="topN"
-                        type="number"
-                        value="50"
-                        min="1"
-                    >
+				<div class="flex items-center gap-2">
 
-                </div>
+					<input
+						id="gridStep"
+						type="number"
+						value="25"
+						min="1"
+					>
+
+					<span class="text-small text-secondary">
+						m
+					</span>
+
+				</div>
+
+				<span class="form-help">
+					Distance entre les centres testés par l'algorithme.
+				</span>
+
+			</div>
+			<div class="form-group">
+
+				<label for="zoneSize">
+					Zone de recherche
+				</label>
+
+				<select id="zoneSize">
+
+					<option value="9" selected>
+						9 cellules
+					</option>
+
+					<option value="25">
+						25 cellules
+					</option>
+
+				</select>
+
+			</div>
 
 
                 <button
@@ -198,7 +229,7 @@
                     <span
                         id="fileStatus"
                         class="badge">
-                        Démo
+                        En attente de données
                     </span>
 
                 </div>
@@ -358,6 +389,7 @@
     https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js,
 	https://unpkg.com/leaflet@1.9.4/dist/leaflet.js,
 	../js/fileLoader.js,
+	 ../js/ConflagGrid.js,
     ../js/conflag.js
 	
 "></div>
