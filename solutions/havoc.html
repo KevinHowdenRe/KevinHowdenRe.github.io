@@ -1,13 +1,4 @@
-
-
-
-
-
-
-
-
 <div class="app">
-
 
     <!-- =====================================================
          HEADER
@@ -15,64 +6,353 @@
 
     <header class="header">
 
-        <a href="../index.html"
-           class="header-brand">
+        <a href="../index.html" class="header-brand">
             HAL
         </a>
 
-
         <nav class="header-nav">
 
-            <a href="../index.html" class="active">
-                Accueil
-            </a>
-			
-			<a href="../articles.html" class="active">
-                Articles
+            <a href="../index.html">Accueil</a>
+            <a href="../articles.html">Articles</a>
+            <a href="../documentation.html">Documentation</a>
+            <a href="../solutions.html" class="active">Solutions</a>
+
+            <a id="login_link" href="../login.html">
+                Login
             </a>
 
-          
-            <a href="../documentation.html" class="active">
-                Documentation
-            </a>
-                
-            <a href="../solutions.html" class="active">
-                Solutions
-            </a>
-			
-			
-			<a id="login_link" href="../login.html" class="active">
-                 Login
-            </a>
-			
-			<button onclick="switchLight()" id="interrupteur" class="theme-toggle" id="theme-toggle" aria-label="Switch theme">
-    ☾ 
-</button>
-
+            <button
+                onclick="switchLight()"
+                id="interrupteur"
+                class="theme-toggle"
+                aria-label="Switch theme"
+                type="button">
+                ☾
+            </button>
 
         </nav>
 
     </header>
 
 
+    <!-- =====================================================
+         PAGE
+         ===================================================== -->
 
-    <main class="page reinsurance-page">
-      <div class="workspace-header">
-        <div>
-          <span class="badge">Havoc</span>
-          <h1 class="page-title mt-4">Cercles de conflagration</h1>
-          <p class="page-description">En cours de développement.</p>
+    <main class="page">
+
+        <!-- PAGE HEADER -->
+
+        <div class="page-header">
+
+            <div>
+                <span class="badge">Analyse géospatiale</span>
+
+                <h1 class="page-title mt-4">
+                    Conflagration
+                </h1>
+
+                <p class="page-description">
+                    Détection et exploration des concentrations d'exposition.
+                </p>
+            </div>
+
+            <div class="flex gap-2">
+                <button class="btn btn-secondary" type="button">
+                    Documentation
+                </button>
+
+                <button class="btn btn-secondary" type="button">
+                    Réinitialiser
+                </button>
+            </div>
+
         </div>
-      </div>
 
-   
+
+        <!-- =================================================
+             WORKSPACE
+             ================================================= -->
+
+        <div
+            class="grid"
+            style="grid-template-columns: 320px minmax(0, 1fr); align-items: start;"
+        >
+
+            <!-- =============================================
+                 LEFT PANEL
+                 ============================================= -->
+
+            <aside class="card">
+
+                <div class="card-header">
+                    <h2 class="card-title">
+                        Configuration
+                    </h2>
+                </div>
+
+
+                <!-- FILE -->
+
+                <div class="form-group">
+
+                    <label for="portfolio-file">
+                        Portefeuille
+                    </label>
+
+                    <input
+                        id="portfolio-file"
+                        type="file"
+                        accept=".csv,.xlsx,.xls"
+                        disabled
+                    >
+
+                    <span class="form-help">
+                        CSV ou Excel. Le chargement sera ajouté à la prochaine étape.
+                    </span>
+
+                </div>
+
+
+                <hr class="divider">
+
+
+                <!-- PARAMETERS -->
+
+                <div class="form-group">
+
+                    <label for="radius">
+                        Rayon
+                    </label>
+
+                    <div class="flex items-center gap-2">
+
+                        <input
+                            id="radius"
+                            type="number"
+                            value="200"
+                            min="1"
+                        >
+
+                        <span class="text-small text-secondary">
+                            m
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="minSI">
+                        Somme assurée minimum
+                    </label>
+
+                    <input
+                        id="minSI"
+                        type="number"
+                        value="100000000"
+                        min="0"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="topN">
+                        Nombre maximum de cercles
+                    </label>
+
+                    <input
+                        id="topN"
+                        type="number"
+                        value="50"
+                        min="1"
+                    >
+
+                </div>
+
+
+                <button
+                    id="btnRun"
+                    class="btn btn-primary w-full"
+                    type="button">
+                    Lancer la détection
+                </button>
+
+
+                <div class="mt-4">
+
+                    <span
+                        id="analysisStatus"
+                        class="badge">
+                        Démo
+                    </span>
+
+                </div>
+
+            </aside>
+
+
+            <!-- =============================================
+                 MAP
+                 ============================================= -->
+
+            <section class="card">
+
+                <div
+                    class="flex items-center justify-between gap-4 mb-4"
+                >
+
+                    <div>
+                        <h2 class="card-title">
+                            Carte
+                        </h2>
+
+                        <span class="text-small text-secondary">
+                            Exploration géographique du portefeuille
+                        </span>
+                    </div>
+
+
+                    <div class="flex items-center gap-2">
+
+                        <span
+                            id="mapPointsInfo"
+                            class="badge">
+                            —
+                        </span>
+
+                        <span
+                            id="mapClustersInfo"
+                            class="badge">
+                            —
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- MAP TOOLBAR -->
+
+                <div class="flex gap-2 mb-4">
+
+                    <input
+                        id="mapSearch"
+                        type="search"
+                        placeholder="Rechercher une adresse..."
+                    >
+
+                    <button
+                        class="btn btn-secondary"
+                        type="button"
+                        disabled>
+                        Rechercher
+                    </button>
+
+                </div>
+
+
+                <!-- LEAFLET -->
+
+                <div
+                    id="map"
+                    style="
+                        width: 100%;
+                        height: 650px;
+                        border: 1px solid var(--color-border);
+                        border-radius: var(--radius-lg);
+                        overflow: hidden;
+                    ">
+                </div>
+
+            </section>
+
+        </div>
+
+
+        <!-- =================================================
+             RESULTS
+             ================================================= -->
+
+        <section class="mt-6">
+
+            <div class="flex items-center justify-between gap-4 mb-4">
+
+                <div>
+
+                    <h2 class="mb-0">
+                        Résultats
+                    </h2>
+
+                    <p class="page-description">
+                        Concentrations détectées par l'analyse.
+                    </p>
+
+                </div>
+
+
+                <div class="flex items-center gap-2">
+
+                    <span
+                        id="resultCount"
+                        class="badge">
+                        —
+                    </span>
+
+                    <button
+                        class="btn btn-secondary"
+                        type="button"
+                        disabled>
+                        Télécharger CSV
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table class="table">
+
+                    <thead>
+                        <tr>
+                            <th>Rang</th>
+                            <th>Somme assurée</th>
+                            <th>Risques</th>
+                            <th>Nouveaux</th>
+                            <th>Latitude</th>
+                            <th>Longitude</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="resultsTableBody">
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
     </main>
-  </div>
-<!-- Core JS -->
 
+</div>
+
+
+
+
+
+<!-- =====================================================
+     PAGE SCRIPTS
+     ===================================================== -->
 
 <div data-scripts="
     ../js/base.js,
-    ../js/config.js,
-    ../js/component.js
+    ../js/conflag.js,
+	https://unpkg.com/leaflet@1.9.4/dist/leaflet.js
 "></div>
