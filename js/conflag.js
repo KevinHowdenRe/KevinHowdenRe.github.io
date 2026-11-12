@@ -238,6 +238,70 @@
         renderTable();
 
     }
+	// =====================================================
+	// RESPONSIVE CONFIGURATION
+	// =====================================================
+
+	function initResponsiveLayout() {
+
+		const workspace =
+			document.querySelector("#conflagWorkspace");
+
+		const button =
+			document.querySelector("#btnToggleConfig");
+
+
+		if (!workspace || !button) {
+			return;
+		}
+
+
+		// Mobile / tablet:
+		// configuration closed by default
+
+		if (window.innerWidth <= 900) {
+			workspace.classList.add("config-collapsed");
+		}
+
+
+		button.addEventListener("click", () => {
+
+			if (window.innerWidth <= 900) {
+
+				workspace.classList.toggle(
+					"config-mobile-open"
+				);
+
+			} else {
+
+				workspace.classList.toggle(
+					"config-collapsed"
+				);
+
+			}
+
+
+			// Leaflet needs to recalculate its dimensions
+			setTimeout(() => {
+
+				if (map) {
+					map.invalidateSize();
+				}
+
+			}, 100);
+
+		});
+
+
+		window.addEventListener("resize", () => {
+
+			if (map) {
+				map.invalidateSize();
+			}
+
+		});
+
+	}
 
 
     // =====================================================
@@ -246,19 +310,21 @@
 
     function boot() {
 
-        initMap();
+    initMap();
 
-        renderTable();
+    renderTable();
+
+    initResponsiveLayout();
 
 
-        document
-            .querySelector("#btnRun")
-            ?.addEventListener(
-                "click",
-                runDemo
-            );
+    document
+        .querySelector("#btnRun")
+        ?.addEventListener(
+            "click",
+            runDemo
+        );
 
-    }
+}
 
 
 	boot();

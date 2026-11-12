@@ -74,16 +74,27 @@
              WORKSPACE
              ================================================= -->
 
-        <div
-            class="grid"
-            style="grid-template-columns: 320px minmax(0, 1fr); align-items: start;"
-        >
+        <!-- WORKSPACE TOOLBAR -->
 
-            <!-- =============================================
-                 LEFT PANEL
-                 ============================================= -->
+		<div class="conflag-toolbar">
 
-            <aside class="card">
+			<button
+				id="btnToggleConfig"
+				class="btn btn-secondary"
+				type="button">
+				☰ Configuration
+			</button>
+
+		</div>
+
+
+		<!-- WORKSPACE -->
+
+		<div id="conflagWorkspace" class="conflag-workspace">
+
+			<!-- CONFIGURATION -->
+
+			<aside id="conflagConfig" class="card conflag-config">
 
                 <div class="card-header">
                     <h2 class="card-title">
@@ -200,7 +211,7 @@
                  MAP
                  ============================================= -->
 
-            <section class="card">
+            <section class="card conflag-map-panel">
 
                 <div
                     class="flex items-center justify-between gap-4 mb-4"
@@ -258,16 +269,7 @@
 
                 <!-- LEAFLET -->
 
-                <div
-                    id="map"
-                    style="
-                        width: 100%;
-                        height: 650px;
-                        border: 1px solid var(--color-border);
-                        border-radius: var(--radius-lg);
-                        overflow: hidden;
-                    ">
-                </div>
+                <div id="map" class="conflag-map"></div>
 
             </section>
 
