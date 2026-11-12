@@ -181,16 +181,16 @@
 
 		// Store source information.
 
-		STATE.source.fileName =
-			source.fileName;
+		//STATE.source.fileName =
+		//	source.fileName;
 
 
-		STATE.source.fileType =
-			source.fileType;
+		//STATE.source.fileType =
+		//	source.fileType;
 
 
-		STATE.source.loadedAt =
-			new Date();
+		//STATE.source.loadedAt =
+		//	new Date();
 
 
 		// Reset analysis metadata.
