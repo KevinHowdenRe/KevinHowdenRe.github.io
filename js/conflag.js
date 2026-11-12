@@ -121,11 +121,9 @@
 				`${loaded.fileName} — ${loaded.data.length.toLocaleString("fr-FR")} lignes`;
 
 
-			console.log("STATE", STATE);
 
 		}
 		catch (error) {
-			console.log("what");
 			status.textContent =
 				error.message;
 
@@ -135,21 +133,8 @@
 		}
 
 	}
-
-	
-	function setInitialData(data) {
-
-		STATE.data.initial =
-			data;
-
-
-		// No geographic selection:
-		// the selected portfolio is the complete portfolio.
-
-		STATE.selected.data =
-			data.slice();
-
-
+	function fullReset(){
+		
 		// A new portfolio invalidates previous results.
 
 		resetResults();
@@ -179,6 +164,27 @@
 		STATE.analysis.lastRunAt =
 			null;
 
+
+		updateAnalysisStatus(
+			"Données réinitialisées"
+		);
+
+	}
+	
+	function setInitialData(data) {
+
+		STATE.data.initial =
+			data;
+
+
+		// No geographic selection:
+		// the selected portfolio is the complete portfolio.
+
+		STATE.selected.data =
+			data.slice();
+
+
+		fullReset();
 
 		updateAnalysisStatus(
 			`${data.length.toLocaleString("fr-FR")} polices chargées`
@@ -488,14 +494,155 @@
 
     }
 
+	// =====================================================
+	// EXCEL EXPORT
+	// =====================================================
 
-    // =====================================================
-    // TABLE
-    // =====================================================
+	function exportSelectedResults() {
+
+		const clusters =
+			STATE.selected.results.clusters;
+
+
+		if (!Array.isArray(clusters) || !clusters.length) {
+
+			updateAnalysisStatus(
+				"Aucun résultat à exporter.",
+				true
+			);
+
+			return;
+
+		}
+
+
+		if (typeof XLSX === "undefined") {
+
+			updateAnalysisStatus(
+				"La bibliothèque Excel n'est pas chargée.",
+				true
+			);
+
+			return;
+
+		}
+
+
+		const exportRows =
+			clusters.map(cluster => ({
+
+				Rang:
+					cluster.rank,
+
+				Somme_assuree:
+					Number(cluster.sum_si ?? 0),
+
+				Nombre_risques:
+					Number(cluster.nb_obs ?? 0),
+
+				Risques_retires:
+					Number(
+						cluster.dedup_removed_points ?? 0
+					),
+
+				SI_retiree:
+					Number(
+						cluster.dedup_removed_si ?? 0
+					),
+
+				Latitude_centre:
+					Number(cluster.center_lat),
+
+				Longitude_centre:
+					Number(cluster.center_lon),
+
+				Identifiants_polices:
+					Array.isArray(cluster.ids)
+						? cluster.ids.join(", ")
+						: ""
+
+			}));
+
+
+		const worksheet =
+			XLSX.utils.json_to_sheet(
+				exportRows
+			);
+		worksheet["!cols"] = [
+
+			{ wch: 8 },
+
+			{ wch: 20 },
+
+			{ wch: 18 },
+
+			{ wch: 18 },
+
+			{ wch: 18 },
+
+			{ wch: 18 },
+
+			{ wch: 18 },
+
+			{ wch: 60 }
+
+		];
+
+		const workbook =
+			XLSX.utils.book_new();
+
+
+		XLSX.utils.book_append_sheet(
+			workbook,
+			worksheet,
+			"Resultats"
+		);
+
+
+		const date =
+			new Date()
+				.toISOString()
+				.slice(0, 10);
+
+
+
+
+
+		const fileName =
+			`conflagration_HAVOC_${date}.xlsx`;
+
+
+		XLSX.writeFile(
+			workbook,
+			fileName
+		);
+
+	}
 
     // =====================================================
 	// RESULTS TABLE
 	// =====================================================
+	function updateExportButton() {
+
+		const button =
+			document.querySelector(
+				"#btnExportResults"
+			);
+
+
+		if (!button) {
+			return;
+		}
+
+
+		const hasResults =
+			STATE.selected.results.clusters.length > 0;
+
+
+		button.disabled =
+			!hasResults;
+
+	}
 
 	function renderTable() {
 
@@ -545,7 +692,7 @@
 					"0 conflagration";
 			}
 
-
+			updateExportButton();
 			return;
 
 		}
@@ -631,6 +778,8 @@
 				`${clusters.length.toLocaleString("fr-FR")} conflagration${clusters.length > 1 ? "s" : ""}`;
 
 		}
+		
+		updateExportButton();
 
 	}
 
@@ -1347,10 +1496,15 @@
 		.querySelector("#btnReset")
 		?.addEventListener(
 			"click",
-			resetResults
+			fullReset
 		);
 			
-		
+		document
+		.querySelector("#btnExportResults")
+		?.addEventListener(
+			"click",
+			exportSelectedResults
+		);
 }
 
 
