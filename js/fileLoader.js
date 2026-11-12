@@ -8,7 +8,7 @@
     // =====================================================
 
     async function load(file, options = {}) {
-
+		console.log("OK1");
         if (!file) {
             throw new Error("Aucun fichier sélectionné.");
         }
@@ -51,7 +51,7 @@
             data,
             options.requiredColumns || []
         );
-
+		console.log("OK2");
 
         return {
             data,

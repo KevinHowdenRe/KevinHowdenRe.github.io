@@ -104,7 +104,7 @@
 			status.textContent =
 				"Chargement...";
 
-
+			console.log("here");
 			const loaded =
 				await FileLoader.load(
 					file,
