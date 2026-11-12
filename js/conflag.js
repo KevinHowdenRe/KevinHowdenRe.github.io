@@ -146,54 +146,51 @@
 
 	}
 	
-	function fullReset(){
-		
-		// A new portfolio invalidates previous results.
+	function fullReset() {
+
+		// Reset data
+
+		STATE.data.initial = [];
+
+		STATE.selected.data = [];
+
+
+		// Reset results
 
 		resetResults();
+
 		renderTable();
 
-		// Reset geographic selection.
 
-		STATE.selection.active =
-			false;
+		// Reset geographic selection
 
+		STATE.selection.active = false;
 
-		STATE.selection.geometry =
-			null;
+		STATE.selection.geometry = null;
 
-
-		STATE.selection.policyIds =
-			[];
+		STATE.selection.policyIds = [];
 
 
-		// Store source information.
+		// Reset source
 
-		STATE.source.fileName =
-			source.fileName;
+		STATE.source.fileName = null;
 
+		STATE.source.fileType = null;
 
-		STATE.source.fileType =
-			source.fileType;
-
-
-		STATE.source.loadedAt =
-			new Date();
+		STATE.source.loadedAt = null;
 
 
-		// Reset analysis metadata.
+		// Reset analysis metadata
 
-		STATE.analysis.parameters =
-			null;
+		STATE.analysis.parameters = null;
 
+		STATE.analysis.lastRunAt = null;
 
-		STATE.analysis.lastRunAt =
-			null;
 
 		updateAnalysisStatus(
 			"En attente de données"
 		);
-		
+
 	}
 	
 	function setInitialData(data, source) {
