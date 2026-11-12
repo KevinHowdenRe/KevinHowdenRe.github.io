@@ -62,7 +62,7 @@
                     Documentation
                 </button>
 
-                <button class="btn btn-secondary" type="button">
+                <button class="btn btn-secondary" type="button" id="btnReset">
                     Réinitialiser
                 </button>
             </div>
@@ -156,7 +156,7 @@
                 <div class="form-group">
 
                     <label for="minSI">
-                        Cluster TSI min (mio €)
+                        TSI min / cluster (mio €)
                     </label>
 
                     <input
@@ -190,10 +190,6 @@
 
 				</div>
 
-				<span class="form-help">
-					Distance entre les centres testés par l'algorithme.
-				</span>
-
 			</div>
 			<div class="form-group">
 
@@ -214,6 +210,22 @@
 				</select>
 
 			</div>
+			
+			<div class="form-group">
+
+			<label for="maxClusters">
+				Nombre maximum de cercles
+			</label>
+
+			<input
+				id="maxClusters"
+				type="number"
+				value="50"
+				min="1"
+				step="1"
+			>
+
+		</div>
 
 
                 <button
@@ -351,16 +363,18 @@
 
                 <table class="table">
 
-                    <thead>
-                        <tr>
-                            <th>Rang</th>
-                            <th>Somme assurée</th>
-                            <th>Risques</th>
-                            <th>Nouveaux</th>
-                            <th>Latitude</th>
-                            <th>Longitude</th>
-                        </tr>
-                    </thead>
+                   <thead>
+					<tr>
+						<th>Rang</th>
+						<th>Somme assurée</th>
+						<th>Risques</th>
+						<th>Risques retirés</th>
+						<th>SI retirée</th>
+						<th>Latitude</th>
+						<th>Longitude</th>
+					</tr>
+				</thead>
+
 
                     <tbody id="resultsTableBody">
                     </tbody>

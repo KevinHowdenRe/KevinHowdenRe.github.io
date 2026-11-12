@@ -146,23 +146,12 @@
 
 	}
 	
-	function setInitialData(data, source) {
-
-		STATE.data.initial =
-			data;
-
-
-		// No geographic selection:
-		// the selected portfolio is the complete portfolio.
-
-		STATE.selected.data =
-			data.slice();
-
-
+	function fullReset(){
+		
 		// A new portfolio invalidates previous results.
 
 		resetResults();
-
+		renderTable();
 
 		// Reset geographic selection.
 
@@ -201,6 +190,24 @@
 		STATE.analysis.lastRunAt =
 			null;
 
+		updateAnalysisStatus(
+			"En attente de données"
+		);
+		
+	}
+	
+	function setInitialData(data, source) {
+
+		STATE.data.initial =
+			data;
+
+
+		// No geographic selection:
+		// the selected portfolio is the complete portfolio.
+
+		STATE.selected.data =
+			data.slice();
+		fullReset();
 
 		updateAnalysisStatus(
 			`${data.length.toLocaleString("fr-FR")} polices chargées`
@@ -208,24 +215,37 @@
 
 	}
 	
+	function createEmptyResults() {
+
+		return {
+
+			clusters: [],
+
+			pointsInClusters: [],
+
+			metadata: {
+
+				rawClustersCount: 0,
+
+				retainedClustersCount: 0,
+
+				removedOverlappingPoints: 0
+
+			}
+
+		};
+
+	}
+
+
 	function resetResults() {
 
-		STATE.data.results = {
-
-			clusters: [],
-
-			pointsInClusters: []
-
-		};
+		STATE.data.results =
+			createEmptyResults();
 
 
-		STATE.selected.results = {
-
-			clusters: [],
-
-			pointsInClusters: []
-
-		};
+		STATE.selected.results =
+			createEmptyResults();
 
 	}
 	
@@ -256,6 +276,11 @@
 		const zoneSize =
 			Number(
 				document.querySelector("#zoneSize")?.value
+			);
+			
+		const maxClusters =
+			Number(
+				document.querySelector("#maxClusters")?.value
 			);
 
 
@@ -293,6 +318,16 @@
 			);
 
 		}
+		if (
+			!Number.isInteger(maxClusters) ||
+			maxClusters <= 0
+		) {
+
+			throw new Error(
+				"Le nombre maximum de cercles doit être un entier supérieur à zéro."
+			);
+
+		}
 
 
 		return {
@@ -303,7 +338,9 @@
 
 			gridStep,
 
-			zoneSize
+			zoneSize,
+			
+			maxClusters
 
 		};
 
@@ -371,6 +408,41 @@
         }).format(value);
 
     }
+	function formatInteger(value) {
+
+		const numericValue =
+			Number(value);
+
+
+		if (!Number.isFinite(numericValue)) {
+			return "—";
+		}
+
+
+		return numericValue.toLocaleString(
+			"fr-FR",
+			{
+				maximumFractionDigits: 0
+			}
+		);
+
+	}
+
+
+	function formatCoordinate(value) {
+
+		const numericValue =
+			Number(value);
+
+
+		if (!Number.isFinite(numericValue)) {
+			return "—";
+		}
+
+
+		return numericValue.toFixed(5);
+
+	}
 
 
     // =====================================================
@@ -450,49 +522,146 @@
     // TABLE
     // =====================================================
 
-    function renderTable() {
+    // =====================================================
+	// RESULTS TABLE
+	// =====================================================
 
-        const tbody =
-            document.querySelector("#resultsTableBody");
+	function renderTable() {
 
-
-        tbody.innerHTML = "";
-
-
-        demoClusters.forEach((cluster, index) => {
-
-            const row = document.createElement("tr");
+		const tbody =
+			document.querySelector(
+				"#resultsTableBody"
+			);
 
 
-            row.innerHTML = `
-                <td>${cluster.rank}</td>
-                <td>${formatSI(cluster.sumSI)}</td>
-                <td>${cluster.risks}</td>
-                <td>${cluster.newRisks}</td>
-                <td>${cluster.lat.toFixed(5)}</td>
-                <td>${cluster.lon.toFixed(5)}</td>
-            `;
+		const resultCount =
+			document.querySelector(
+				"#resultCount"
+			);
 
 
-            row.style.cursor = "pointer";
+		if (!tbody) {
+			return;
+		}
 
 
-            row.addEventListener(
-                "click",
-                () => focusCluster(index)
-            );
+		const clusters =
+			STATE.selected.results.clusters;
 
 
-            tbody.appendChild(row);
+		tbody.innerHTML =
+			"";
 
-        });
+
+		if (!clusters.length) {
+
+			const row =
+				document.createElement("tr");
 
 
-        document.querySelector("#resultCount").textContent =
-            `${demoClusters.length} conflagrations`;
+			row.innerHTML = `
+				<td colspan="7" class="text-secondary">
+					Aucun résultat à afficher.
+				</td>
+			`;
 
-    }
 
+			tbody.appendChild(row);
+
+
+			if (resultCount) {
+				resultCount.textContent =
+					"0 conflagration";
+			}
+
+
+			return;
+
+		}
+
+
+		for (const cluster of clusters) {
+
+			const row =
+				document.createElement("tr");
+
+
+			row.dataset.rank =
+				String(cluster.rank);
+
+
+			row.style.cursor =
+				"pointer";
+
+
+			row.innerHTML = `
+				<td>
+					${cluster.rank}
+				</td>
+
+				<td>
+					${formatSI(cluster.sum_si)}
+				</td>
+
+				<td>
+					${formatInteger(cluster.nb_obs)}
+				</td>
+
+				<td>
+					${formatInteger(
+						cluster.dedup_removed_points
+					)}
+				</td>
+
+				<td>
+					${formatSI(
+						cluster.dedup_removed_si
+					)}
+				</td>
+
+				<td>
+					${formatCoordinate(
+						cluster.center_lat
+					)}
+				</td>
+
+				<td>
+					${formatCoordinate(
+						cluster.center_lon
+					)}
+				</td>
+			`;
+
+
+			row.addEventListener(
+				"click",
+				() => {
+
+					console.log(
+						"Selected cluster",
+						cluster
+					);
+
+					// Map focus will be connected
+					// during the mapping step.
+
+				}
+			);
+
+
+			tbody.appendChild(row);
+
+		}
+
+
+		if (resultCount) {
+
+			resultCount.textContent =
+				`${clusters.length.toLocaleString("fr-FR")} conflagration${clusters.length > 1 ? "s" : ""}`;
+
+		}
+
+	}
 
     // =====================================================
     // INTERACTION
@@ -526,9 +695,286 @@
 
 
     // =====================================================
-    // DEMO ACTION
-    // =====================================================
+	// EXCLUSIVE CLUSTER DEDUPLICATION
+	// =====================================================
 
+	function dedupClustersExclusiveByPoints(
+		rawResult,
+		{
+			maxClusters = 50,
+			thresholdSI = 0
+		} = {}
+	) {
+
+		const clusters =
+			Array.isArray(rawResult?.clusters)
+				? rawResult.clusters
+				: [];
+
+
+		const points =
+			Array.isArray(rawResult?.points_in_clusters)
+				? rawResult.points_in_clusters
+				: [];
+
+
+		if (!clusters.length) {
+
+			return {
+
+				kept: [],
+
+				droppedTotal: 0,
+
+				rawClustersCount: 0
+
+			};
+
+		}
+
+
+		// Map policy ID -> SI
+
+		const siById =
+			new Map();
+
+
+		for (const point of points) {
+
+			const id =
+				String(
+					point.id_policy ?? ""
+				);
+
+
+			if (!id) {
+				continue;
+			}
+
+
+			const parsedSI =
+				Number(point.SI ?? 0);
+
+
+			siById.set(
+				id,
+				Number.isFinite(parsedSI)
+					? parsedSI
+					: 0
+			);
+
+		}
+
+
+		// Initial ordering by original SI.
+
+		const sorted =
+			clusters
+				.slice()
+				.sort(
+					(a, b) =>
+						Number(b.sum_si ?? 0) -
+						Number(a.sum_si ?? 0)
+				);
+
+
+		// Policies already allocated to a retained cluster.
+
+		const used =
+			new Set();
+
+
+		const kept =
+			[];
+
+
+		let droppedTotal =
+			0;
+
+
+		function getEffectiveCluster(cluster) {
+
+			const originalIds =
+				Array.isArray(cluster.ids)
+					? cluster.ids.map(String)
+					: [];
+
+
+			const effectiveIds =
+				[];
+
+
+			let effectiveSI =
+				0;
+
+
+			for (const id of originalIds) {
+
+				if (used.has(id)) {
+					continue;
+				}
+
+
+				effectiveIds.push(id);
+
+
+				effectiveSI +=
+					siById.get(id) ?? 0;
+
+			}
+
+
+			const originalSI =
+				Number(cluster.sum_si ?? 0);
+
+
+			const originalCount =
+				Number(
+					cluster.nb_obs ??
+					originalIds.length
+				);
+
+
+			return {
+
+				...cluster,
+
+				ids: effectiveIds,
+
+				sum_si: effectiveSI,
+
+				nb_obs: effectiveIds.length,
+
+				dedup_mode: "exclusive",
+
+				dedup_removed_points:
+					Math.max(
+						0,
+						(
+							Number.isFinite(originalCount)
+								? originalCount
+								: originalIds.length
+						) -
+						effectiveIds.length
+					),
+
+				dedup_removed_si:
+					Math.max(
+						0,
+						(
+							Number.isFinite(originalSI)
+								? originalSI
+								: 0
+						) -
+						effectiveSI
+					)
+
+			};
+
+		}
+
+
+		while (kept.length < maxClusters) {
+
+			let best =
+				null;
+
+
+			let bestIndex =
+				-1;
+
+
+			for (
+				let index = 0;
+				index < sorted.length;
+				index++
+			) {
+
+				const cluster =
+					sorted[index];
+
+
+				if (!cluster) {
+					continue;
+				}
+
+
+				const effectiveCluster =
+					getEffectiveCluster(cluster);
+
+
+				if (effectiveCluster.nb_obs <= 1) {
+					continue;
+				}
+
+
+				if (
+					effectiveCluster.sum_si <
+					thresholdSI
+				) {
+					continue;
+				}
+
+
+				if (
+					!best ||
+					effectiveCluster.sum_si >
+					best.sum_si
+				) {
+
+					best =
+						effectiveCluster;
+
+
+					bestIndex =
+						index;
+
+				}
+
+			}
+
+
+			if (!best) {
+				break;
+			}
+
+
+			for (const id of best.ids) {
+				used.add(String(id));
+			}
+
+
+			sorted[bestIndex] =
+				null;
+
+
+			kept.push(best);
+
+		}
+
+
+		for (const cluster of kept) {
+
+			droppedTotal +=
+				Number(
+					cluster.dedup_removed_points ?? 0
+				);
+
+		}
+
+
+		return {
+
+			kept,
+
+			droppedTotal,
+
+			rawClustersCount:
+				clusters.length
+
+		};
+
+	}
     // =====================================================
 	// CONFLAGRATION ANALYSIS
 	// =====================================================
@@ -620,6 +1066,8 @@
 				parsedResult,
 				parameters
 			);
+			
+			renderTable();
 
 
 			updateAnalysisStatus(
@@ -637,7 +1085,7 @@
 
 			resetResults();
 
-
+			renderTable();
 			updateAnalysisStatus(
 				error.message,
 				true
@@ -668,23 +1116,23 @@
 		parameters
 	) {
 
+		const deduplicated =
+			dedupClustersExclusiveByPoints(
+				algorithmResult,
+				{
+
+					maxClusters:
+						parameters.maxClusters,
+
+					thresholdSI:
+						parameters.threshold
+
+				}
+			);
+
+
 		const clusters =
-			Array.isArray(algorithmResult.clusters)
-				? algorithmResult.clusters
-				: [];
-
-
-		const pointsInClusters =
-			Array.isArray(
-				algorithmResult.points_in_clusters
-			)
-				? algorithmResult.points_in_clusters
-				: [];
-
-
-		const normalizedResults = {
-
-			clusters: clusters.map(
+			deduplicated.kept.map(
 				(cluster, index) => ({
 
 					...cluster,
@@ -692,22 +1140,70 @@
 					rank: index + 1
 
 				})
-			),
+			);
 
-			pointsInClusters
+
+		// Keep only policies belonging to a retained cluster.
+
+		const retainedPolicyIds =
+			new Set();
+
+
+		for (const cluster of clusters) {
+
+			for (const id of cluster.ids) {
+
+				retainedPolicyIds.add(
+					String(id)
+				);
+
+			}
+
+		}
+
+
+		const rawPoints =
+			Array.isArray(
+				algorithmResult.points_in_clusters
+			)
+				? algorithmResult.points_in_clusters
+				: [];
+
+
+		const pointsInClusters =
+			rawPoints.filter(
+				point =>
+					retainedPolicyIds.has(
+						String(point.id_policy)
+					)
+			);
+
+
+		const normalizedResults = {
+
+			clusters,
+
+			pointsInClusters,
+
+			metadata: {
+
+				rawClustersCount:
+					deduplicated.rawClustersCount,
+
+				retainedClustersCount:
+					clusters.length,
+
+				removedOverlappingPoints:
+					deduplicated.droppedTotal
+
+			}
 
 		};
 
-		// The algorithm was applied to selected data,
-		// so the result is immediately the selected result.
 
 		STATE.selected.results =
 			normalizedResults;
 
-
-		// When no polygon selection is active,
-		// selected data represents the complete portfolio.
-		// Therefore selected results are also global results.
 
 		if (!STATE.selection.active) {
 
@@ -717,7 +1213,11 @@
 					normalizedResults.clusters.slice(),
 
 				pointsInClusters:
-					normalizedResults.pointsInClusters.slice()
+					normalizedResults.pointsInClusters.slice(),
+
+				metadata: {
+					...normalizedResults.metadata
+				}
 
 			};
 
@@ -726,13 +1226,20 @@
 
 		STATE.analysis.parameters = {
 
-			radius: parameters.radius,
+			radius:
+				parameters.radius,
 
-			threshold: parameters.threshold,
+			threshold:
+				parameters.threshold,
 
-			gridStep: parameters.gridStep,
+			gridStep:
+				parameters.gridStep,
 
-			zoneSize: parameters.zoneSize
+			zoneSize:
+				parameters.zoneSize,
+
+			maxClusters:
+				parameters.maxClusters
 
 		};
 
@@ -865,7 +1372,14 @@
 			"click",
 			runAnalysis
 		);
-
+	 document
+		.querySelector("#btnReset")
+		?.addEventListener(
+			"click",
+			fullReset
+		);
+			
+		
 }
 
 
