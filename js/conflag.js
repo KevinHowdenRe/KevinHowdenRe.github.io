@@ -694,19 +694,10 @@
             .slice(0, 10);
 
 
-    const sourceName =
-        STATE.source.fileName
-            ? STATE.source.fileName
-                .replace(/\.[^/.]+$/, "")
-                .replace(
-                    /[^a-zA-Z0-9_-]/g,
-                    "_"
-                )
-            : "portfolio";
 
 
     const fileName =
-        `conflagration_${sourceName}_${date}.xlsx`;
+        `havoc_conflagration_${date}.xlsx`;
 
 
     XLSX.writeFile(
