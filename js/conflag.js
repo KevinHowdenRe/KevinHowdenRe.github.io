@@ -9,7 +9,7 @@
 
 		country: "Luxembourg",
 
-		policyMinZoom: 14,
+		policyMinZoom: 15,
 
 		policyColors: [
 			{ max: 100000,   color: "#22c55e" }, // green
@@ -232,6 +232,10 @@
 		if (clusterLayer) {
 			clusterLayer.clearLayers();
 		}
+		
+		if (selectionLayer) {
+			selectionLayer.clearLayers();
+		}
 
 	}
 	
@@ -438,6 +442,7 @@
     let clusterLayers = [];
 	let policyLayer;
 	let clusterLayer;
+	let selectionLayer;
 
 
     // =====================================================
@@ -495,6 +500,374 @@
     // =====================================================
 
 	// =====================================================
+	// POLYGON SELECTION
+	// =====================================================
+	function applyPolygonSelection(
+		polygonGeoJSON
+	) {
+
+		if (!polygonGeoJSON) {
+
+			clearPolygonSelection();
+
+			return;
+
+		}
+
+
+		const selectedData =
+			STATE.data.initial.filter(
+				policy =>
+					isPointInsidePolygon(
+
+						policy.Latitude,
+
+						policy.Longitude,
+
+						polygonGeoJSON
+
+					)
+			);
+
+
+		STATE.selection.active =
+			true;
+
+
+		STATE.selection.geometry =
+			polygonGeoJSON;
+
+
+		STATE.selection.policyIds =
+			selectedData
+				.map(
+					policy =>
+						String(
+							policy.id_policy ?? ""
+						)
+				)
+				.filter(Boolean);
+
+
+		STATE.selected.data =
+			selectedData;
+
+
+		// The existing result does not correspond
+		// to the new selected portfolio.
+
+		STATE.selected.results =
+			createEmptyResults();
+
+
+		refreshSelectionDisplay();
+
+
+		updateAnalysisStatus(
+			`${selectedData.length.toLocaleString("fr-FR")} polices sélectionnées — relancez l'analyse`
+		);
+
+	}
+	function initPolygonSelection() {
+
+		if (!map) {
+			return;
+		}
+
+
+		if (
+			typeof L.Draw === "undefined" ||
+			typeof L.Control.Draw === "undefined"
+		) {
+
+			console.error(
+				"Leaflet Draw n'est pas chargé."
+			);
+
+			return;
+
+		}
+
+
+		selectionLayer =
+			new L.FeatureGroup();
+
+
+		map.addLayer(
+			selectionLayer
+		);
+
+
+		const drawControl =
+			new L.Control.Draw({
+
+				position: "topleft",
+
+				draw: {
+
+					polygon: {
+
+						allowIntersection: false,
+
+						showArea: true,
+
+						shapeOptions: {
+
+							color: "#2563eb",
+
+							weight: 2,
+
+							fillColor: "#3b82f6",
+
+							fillOpacity: 0.15
+
+						}
+
+					},
+
+					polyline: false,
+
+					rectangle: false,
+
+					circle: false,
+
+					circlemarker: false,
+
+					marker: false
+
+				},
+
+				edit: {
+
+					featureGroup:
+						selectionLayer,
+
+					edit: true,
+
+					remove: true
+
+				}
+
+			});
+
+
+		map.addControl(
+			drawControl
+		);
+
+
+		map.on(
+			L.Draw.Event.CREATED,
+			event => {
+
+				// Only one active polygon at a time.
+
+				selectionLayer.clearLayers();
+
+				selectionLayer.addLayer(
+					event.layer
+				);
+
+
+				applyPolygonSelection(
+					event.layer.toGeoJSON()
+				);
+
+			}
+		);
+
+
+		map.on(
+			L.Draw.Event.EDITED,
+			event => {
+
+				let polygon =
+					null;
+
+
+				event.layers.eachLayer(
+					layer => {
+
+						polygon =
+							layer.toGeoJSON();
+
+					}
+				);
+
+
+				applyPolygonSelection(
+					polygon
+				);
+
+			}
+		);
+
+
+		map.on(
+			L.Draw.Event.DELETED,
+			clearPolygonSelection
+		);
+
+	}
+	function clearPolygonSelection() {
+
+		STATE.selection.active =
+			false;
+
+
+		STATE.selection.geometry =
+			null;
+
+
+		STATE.selection.policyIds =
+			[];
+
+
+		STATE.selected.data =
+			STATE.data.initial.slice();
+
+
+		// Restore the full-portfolio analysis.
+
+		STATE.selected.results = {
+
+			clusters:
+				STATE.data.results.clusters.slice(),
+
+			pointsInClusters:
+				STATE.data.results.pointsInClusters.slice(),
+
+			metadata: {
+				...STATE.data.results.metadata
+			}
+
+		};
+
+
+		refreshSelectionDisplay();
+
+
+		if (STATE.selected.data.length) {
+
+			updateAnalysisStatus(
+				`${STATE.selected.data.length.toLocaleString("fr-FR")} polices — portefeuille complet`
+			);
+
+		}
+		else {
+
+			updateAnalysisStatus(
+				"En attente de données"
+			);
+
+		}
+
+	}
+
+	function refreshSelectionDisplay() {
+
+		refreshPolicyLayer();
+
+		refreshClusterLayer();
+
+		renderTable();
+
+	}
+
+	function isPointInsidePolygon(
+		lat,
+		lon,
+		polygonGeoJSON
+	) {
+
+		const coordinates =
+			polygonGeoJSON
+				?.geometry
+				?.coordinates
+				?.[0];
+
+
+		if (
+			!Array.isArray(coordinates) ||
+			coordinates.length < 3
+		) {
+			return false;
+		}
+
+
+		const x =
+			Number(lon);
+
+
+		const y =
+			Number(lat);
+
+
+		if (
+			!Number.isFinite(x) ||
+			!Number.isFinite(y)
+		) {
+			return false;
+		}
+
+
+		let inside =
+			false;
+
+
+		for (
+			let index = 0,
+				previousIndex = coordinates.length - 1;
+
+			index < coordinates.length;
+
+			previousIndex = index++
+		) {
+
+			const [currentX, currentY] =
+				coordinates[index];
+
+
+			const [previousX, previousY] =
+				coordinates[previousIndex];
+
+
+			const intersects =
+
+				(currentY > y) !==
+				(previousY > y)
+
+				&&
+
+				x <
+				(
+					(
+						previousX - currentX
+					)
+					*
+					(
+						y - currentY
+					)
+					/
+					(
+						previousY - currentY
+					)
+				)
+				+
+				currentX;
+
+
+			if (intersects) {
+				inside = !inside;
+			}
+
+		}
+
+
+		return inside;
+
+	}
+	// =====================================================
 	// CLUSTER DISPLAY
 	// =====================================================
 
@@ -510,7 +883,18 @@
 
 		const clusters =
 			STATE.selected.results.clusters;
+		const clustersInfo =
+			document.querySelector(
+				"#mapClustersInfo"
+			);
 
+
+		if (clustersInfo) {
+
+			clustersInfo.textContent =
+				`${clusters.length.toLocaleString("fr-FR")} cercle${clusters.length > 1 ? "s" : ""}`;
+
+		}
 
 		if (!Array.isArray(clusters)) {
 			return;
@@ -614,6 +998,19 @@
 
 		const policies =
 			STATE.selected.data;
+
+		const pointsInfo =
+			document.querySelector(
+				"#mapPointsInfo"
+			);
+
+
+		if (pointsInfo) {
+
+			pointsInfo.textContent =
+				`${policies.length.toLocaleString("fr-FR")} polices`;
+
+		}
 
 
 		if (!Array.isArray(policies)) {
@@ -760,6 +1157,7 @@
 		
 		policyLayer = L.layerGroup().addTo(map);
 		clusterLayer = L.layerGroup().addTo(map);
+		initPolygonSelection();
 		map.on("zoomend moveend",refreshPolicyLayer);
 
     }
