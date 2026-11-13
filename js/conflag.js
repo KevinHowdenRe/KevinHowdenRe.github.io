@@ -104,7 +104,6 @@
 			status.textContent =
 				"Chargement...";
 
-			console.log("here");
 			const loaded =
 				await FileLoader.load(
 					file,
@@ -610,8 +609,6 @@
 							cluster_sum_si:
 								cluster.sum_si,
 
-							cluster_center_key:
-								cluster.center_key ?? "",
 
 							cluster_dedup_mode:
 								cluster.dedup_mode ?? "",
@@ -840,20 +837,34 @@
 
 
 			row.addEventListener(
-				"click",
-				() => {
+			"click",
+			() => {
 
-					console.log(
-						"Selected cluster",
-						cluster
-					);
+				const lat =
+					Number(cluster.center_lat);
 
-					// Map focus will be connected
-					// during the mapping step.
+				const lon =
+					Number(cluster.center_lon);
 
+
+				if (
+					!Number.isFinite(lat) ||
+					!Number.isFinite(lon)
+				) {
+					return;
 				}
-			);
 
+
+				map.setView(
+					[lat, lon],
+					16,
+					{
+						animate: true
+					}
+				);
+
+			}
+		);
 
 			tbody.appendChild(row);
 
@@ -1280,12 +1291,6 @@
 
 			updateAnalysisStatus(
 				`${STATE.selected.results.clusters.length.toLocaleString("fr-FR")} cercles détectés`
-			);
-
-
-			console.log(
-				"Conflagration results",
-				STATE.selected.results
 			);
 
 		}
