@@ -5,12 +5,26 @@
 	// =====================================================
 	// MAP CONFIGURATION
 	// =====================================================
-
 	const MAP_CONFIG = {
 
 		country: "Luxembourg",
 
-		policyMinZoom: 13,
+		policyMinZoom: 14,
+
+		policyColors: [
+			{ max: 100000,   color: "#22c55e" }, // green
+			{ max: 500000,   color: "#84cc16" }, // lime
+			{ max: 1000000,  color: "#eab308" }, // yellow
+			{ max: 5000000,  color: "#f97316" }, // orange
+			{ max: Infinity, color: "#dc2626" }  // red
+		],
+
+		clusterColors: [
+			{ max: 100000000,  color: "#22c55e" }, // green
+			{ max: 250000000,  color: "#eab308" }, // yellow
+			{ max: 500000000,  color: "#f97316" }, // orange
+			{ max: Infinity,   color: "#dc2626" }  // red
+		],
 
 		countries: {
 
@@ -22,16 +36,29 @@
 			France: {
 				center: [46.6034, 1.8883],
 				zoom: 6
-			},
-
-			Belgium: {
-				center: [50.5039, 4.4699],
-				zoom: 8
 			}
 
 		}
 
 	};
+	function getColor(value, scale) {
+
+		const numericValue = Number(value);
+
+		if (!Number.isFinite(numericValue)) {
+			return "#94a3b8";
+		}
+
+		for (const level of scale) {
+
+			if (numericValue <= level.max) {
+				return level.color;
+			}
+
+		}
+
+		return scale[scale.length - 1].color;
+	}
 	
 	// =====================================================
 	// APPLICATION STATE
@@ -200,6 +227,10 @@
 
 		if (policyLayer) {
 			policyLayer.clearLayers();
+		}
+
+		if (clusterLayer) {
+			clusterLayer.clearLayers();
 		}
 
 	}
@@ -406,6 +437,7 @@
     let map;
     let clusterLayers = [];
 	let policyLayer;
+	let clusterLayer;
 
 
     // =====================================================
@@ -462,6 +494,94 @@
     // MAP
     // =====================================================
 
+	// =====================================================
+	// CLUSTER DISPLAY
+	// =====================================================
+
+	function refreshClusterLayer() {
+
+		if (!map || !clusterLayer) {
+			return;
+		}
+
+
+		clusterLayer.clearLayers();
+
+
+		const clusters =
+			STATE.selected.results.clusters;
+
+
+		if (!Array.isArray(clusters)) {
+			return;
+		}
+
+
+		const radius =
+			STATE.analysis.parameters?.radius;
+
+
+		if (!Number.isFinite(radius)) {
+			return;
+		}
+
+
+		for (const cluster of clusters) {
+
+			const lat =
+				Number(cluster.center_lat);
+
+			const lon =
+				Number(cluster.center_lon);
+
+			const sumSI =
+				Number(cluster.sum_si);
+
+
+			if (
+				!Number.isFinite(lat) ||
+				!Number.isFinite(lon)
+			) {
+				continue;
+			}
+
+
+			const color =
+				getColor(
+					sumSI,
+					MAP_CONFIG.clusterColors
+				);
+
+
+			const circle =
+				L.circle(
+					[lat, lon],
+					{
+						radius: radius,
+
+						color: color,
+
+						weight: 2,
+
+						fillColor: color,
+
+						fillOpacity: 0.35
+					}
+				);
+
+
+			circle.bindPopup(
+				createClusterPopup(cluster)
+			);
+
+
+			circle.addTo(
+				clusterLayer
+			);
+
+		}
+
+	}
 	// =====================================================
 	// POLICY DISPLAY
 	// =====================================================
@@ -530,15 +650,22 @@
 			}
 
 
+			const color =
+				getColor(
+					policy.SI,
+					MAP_CONFIG.policyColors
+				);
+
+
 			const marker =
 				L.circleMarker(
 					position,
 					{
 						radius: 4,
 						weight: 1,
-						color: "#2563eb",
-						fillColor: "#2563eb",
-						fillOpacity: 0.65
+						color: color,
+						fillColor: color,
+						fillOpacity: 0.7
 					}
 				);
 
@@ -553,6 +680,27 @@
 			);
 
 		}
+
+	}
+	function createClusterPopup(cluster) {
+
+		return `
+			<strong>Conflagration #${cluster.rank}</strong>
+			<br><br>
+
+			SI :
+			<strong>${formatSI(cluster.sum_si)}</strong>
+
+			<br>
+
+			Risques :
+			<strong>${formatInteger(cluster.nb_obs)}</strong>
+
+			<br>
+
+			Risques retirés :
+			${formatInteger(cluster.dedup_removed_points)}
+		`;
 
 	}
 	function createPolicyPopup(policy) {
@@ -611,6 +759,7 @@
         ).addTo(map);
 		
 		policyLayer = L.layerGroup().addTo(map);
+		clusterLayer = L.layerGroup().addTo(map);
 		map.on("zoomend moveend",refreshPolicyLayer);
 
     }
@@ -1408,8 +1557,11 @@
 				parsedResult,
 				parameters
 			);
-			
+
+
 			renderTable();
+
+			refreshClusterLayer();
 
 
 			updateAnalysisStatus(
