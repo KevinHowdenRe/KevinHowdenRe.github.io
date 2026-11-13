@@ -1,6 +1,35 @@
 (() => {
 
     "use strict";
+
+	// =====================================================
+	// MAP CONFIGURATION
+	// =====================================================
+
+	const MAP_CONFIG = {
+
+		country: "Luxembourg",
+
+		countries: {
+
+			Luxembourg: {
+				center: [49.8153, 6.1296],
+				zoom: 9
+			},
+
+			France: {
+				center: [46.6034, 1.8883],
+				zoom: 6
+			},
+
+			Belgium: {
+				center: [50.5039, 4.4699],
+				zoom: 8
+			}
+
+		}
+
+	};
 	
 	// =====================================================
 	// APPLICATION STATE
@@ -426,10 +455,25 @@
 
     function initMap() {
 
-        map = L.map("map").setView(
-            [48.8566, 2.3522],
-            12
-        );
+        const countryConfig =
+			MAP_CONFIG.countries[
+				MAP_CONFIG.country
+			];
+
+
+		if (!countryConfig) {
+
+			throw new Error(
+				`Configuration cartographique inconnue : ${MAP_CONFIG.country}`
+			);
+
+		}
+
+
+		map = L.map("map").setView(
+			countryConfig.center,
+			countryConfig.zoom
+		);
 
 
         L.tileLayer(
