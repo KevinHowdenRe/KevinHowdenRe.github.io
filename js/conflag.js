@@ -10,6 +10,8 @@
 
 		country: "Luxembourg",
 
+		policyMinZoom: 13,
+
 		countries: {
 
 			Luxembourg: {
@@ -196,6 +198,10 @@
 			"Données réinitialisées"
 		);
 
+		if (policyLayer) {
+			policyLayer.clearLayers();
+		}
+
 	}
 	
 	function setInitialData(data) {
@@ -216,6 +222,8 @@
 		updateAnalysisStatus(
 			`${data.length.toLocaleString("fr-FR")} polices chargées`
 		);
+
+		refreshPolicyLayer();
 
 	}
 	
@@ -397,6 +405,7 @@
 
     let map;
     let clusterLayers = [];
+	let policyLayer;
 
 
     // =====================================================
@@ -453,6 +462,123 @@
     // MAP
     // =====================================================
 
+	// =====================================================
+	// POLICY DISPLAY
+	// =====================================================
+
+	function refreshPolicyLayer() {
+
+		if (!map || !policyLayer) {
+			return;
+		}
+
+
+		// Always clear existing displayed points first
+
+		policyLayer.clearLayers();
+
+
+		// Do not display policies below configured zoom
+
+		if (
+			map.getZoom() <
+			MAP_CONFIG.policyMinZoom
+		) {
+			return;
+		}
+
+
+		const bounds =
+			map.getBounds();
+
+
+		const policies =
+			STATE.selected.data;
+
+
+		if (!Array.isArray(policies)) {
+			return;
+		}
+
+
+		for (const policy of policies) {
+
+			const lat =
+				Number(policy.Latitude);
+
+			const lon =
+				Number(policy.Longitude);
+
+
+			if (
+				!Number.isFinite(lat) ||
+				!Number.isFinite(lon)
+			) {
+				continue;
+			}
+
+
+			const position =
+				L.latLng(lat, lon);
+
+
+			// Only render points currently visible
+			// in the Leaflet viewport
+
+			if (!bounds.contains(position)) {
+				continue;
+			}
+
+
+			const marker =
+				L.circleMarker(
+					position,
+					{
+						radius: 4,
+						weight: 1,
+						color: "#2563eb",
+						fillColor: "#2563eb",
+						fillOpacity: 0.65
+					}
+				);
+
+
+			marker.bindPopup(
+				createPolicyPopup(policy)
+			);
+
+
+			marker.addTo(
+				policyLayer
+			);
+
+		}
+
+	}
+	function createPolicyPopup(policy) {
+
+		const id =
+			policy.id_policy ?? "—";
+
+
+		const si =
+			Number(policy.SI);
+
+
+		const formattedSI =
+			Number.isFinite(si)
+				? formatSI(si)
+				: "—";
+
+
+		return `
+			<strong>${id}</strong>
+			<br>
+			SI : ${formattedSI}
+		`;
+
+	}
+
     function initMap() {
 
         const countryConfig =
@@ -483,56 +609,9 @@
                 attribution: "© OpenStreetMap contributors"
             }
         ).addTo(map);
-
-
-        renderClusters();
-
-    }
-
-
-    function renderClusters() {
-
-        clusterLayers = [];
-
-
-        demoClusters.forEach((cluster) => {
-
-            const circle = L.circle(
-                [cluster.lat, cluster.lon],
-                {
-                    radius: 1200,
-                    color: "#c92a2a",
-                    weight: 2,
-                    fillColor: "#c92a2a",
-                    fillOpacity: 0.05
-                }
-            );
-
-
-            circle.bindPopup(`
-                <strong>Conflagration #${cluster.rank}</strong>
-                <br><br>
-                Somme assurée :
-                <strong>${formatSI(cluster.sumSI)}</strong>
-                <br>
-                Risques :
-                <strong>${cluster.risks}</strong>
-            `);
-
-
-            circle.addTo(map);
-
-
-            clusterLayers.push(circle);
-
-        });
-
-
-        document.querySelector("#mapPointsInfo").textContent =
-            "105 risques";
-
-        document.querySelector("#mapClustersInfo").textContent =
-            `${demoClusters.length} cercles`;
+		
+		policyLayer = L.layerGroup().addTo(map);
+		map.on("zoomend moveend",refreshPolicyLayer);
 
     }
 
