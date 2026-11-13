@@ -111,7 +111,6 @@
 					DATA_SCHEMA
 				);
 
-			console.log(loaded);
 			setInitialData(
 				loaded.data,
 			);
@@ -528,96 +527,194 @@
 		}
 
 
-		const exportRows =
-			clusters.map(cluster => ({
+		// =====================================================
+		// MAP ORIGINAL PORTFOLIO BY POLICY ID
+		// =====================================================
 
-				Rang:
-					cluster.rank,
-
-				Somme_assuree:
-					Number(cluster.sum_si ?? 0),
-
-				Nombre_risques:
-					Number(cluster.nb_obs ?? 0),
-
-				Risques_retires:
-					Number(
-						cluster.dedup_removed_points ?? 0
-					),
-
-				SI_retiree:
-					Number(
-						cluster.dedup_removed_si ?? 0
-					),
-
-				Latitude_centre:
-					Number(cluster.center_lat),
-
-				Longitude_centre:
-					Number(cluster.center_lon),
-
-				Identifiants_polices:
-					Array.isArray(cluster.ids)
-						? cluster.ids.join(", ")
-						: ""
-
-			}));
+		const portfolioById =
+			new Map();
 
 
-		const worksheet =
-			XLSX.utils.json_to_sheet(
-				exportRows
+		for (const policy of STATE.data.initial) {
+
+			const id =
+				String(
+					policy.id_policy ?? ""
+				);
+
+
+			if (!id) {
+				continue;
+			}
+
+
+			portfolioById.set(
+				id,
+				policy
 			);
-		worksheet["!cols"] = [
 
-			{ wch: 8 },
-
-			{ wch: 20 },
-
-			{ wch: 18 },
-
-			{ wch: 18 },
-
-			{ wch: 18 },
-
-			{ wch: 18 },
-
-			{ wch: 18 },
-
-			{ wch: 60 }
-
-		];
-
-		const workbook =
-			XLSX.utils.book_new();
+		}
 
 
-		XLSX.utils.book_append_sheet(
-			workbook,
-			worksheet,
-			"Resultats"
+		// =====================================================
+		// BUILD EXPORT
+		// One row = one policy inside one cluster
+		// =====================================================
+
+		const exportRows =
+			[];
+
+
+		clusters.forEach(
+			(cluster, clusterIndex) => {
+
+				const ids =
+					Array.isArray(cluster.ids)
+						? cluster.ids
+						: [];
+
+
+				ids.forEach(
+					(policyId, policyIndex) => {
+
+						const id =
+							String(policyId);
+
+
+						const portfolioRow =
+							portfolioById.get(id) || {};
+
+
+						exportRows.push({
+
+							// -----------------------------
+							// CLUSTER INFORMATION
+							// -----------------------------
+
+							cluster_number:
+								cluster.rank ??
+								clusterIndex + 1,
+
+							cluster_policy_position:
+								policyIndex + 1,
+
+							cluster_center_lat:
+								cluster.center_lat,
+
+							cluster_center_lon:
+								cluster.center_lon,
+
+							cluster_nb_obs:
+								cluster.nb_obs,
+
+							cluster_sum_si:
+								cluster.sum_si,
+
+							cluster_center_key:
+								cluster.center_key ?? "",
+
+							cluster_dedup_mode:
+								cluster.dedup_mode ?? "",
+
+							cluster_dedup_removed_points:
+								cluster.dedup_removed_points ?? 0,
+
+							cluster_dedup_removed_si:
+								cluster.dedup_removed_si ?? 0,
+
+
+							// -----------------------------
+							// ORIGINAL PORTFOLIO
+							// -----------------------------
+
+							...portfolioRow
+
+						});
+
+					}
+				);
+
+			}
 		);
 
 
-		const date =
-			new Date()
-				.toISOString()
-				.slice(0, 10);
+    // =====================================================
+    // CREATE EXCEL
+    // =====================================================
+
+    const worksheet =
+        XLSX.utils.json_to_sheet(
+            exportRows
+        );
 
 
+    // Automatic-ish widths
+
+    const columns =
+        Object.keys(
+            exportRows[0] || {}
+        );
 
 
+    worksheet["!cols"] =
+        columns.map(
+            column => ({
 
-		const fileName =
-			`conflagration_HAVOC_${date}.xlsx`;
+                wch:
+                    Math.min(
+                        Math.max(
+                            column.length + 2,
+                            12
+                        ),
+                        35
+                    )
+
+            })
+        );
 
 
-		XLSX.writeFile(
-			workbook,
-			fileName
-		);
+    const workbook =
+        XLSX.utils.book_new();
 
-	}
+
+    XLSX.utils.book_append_sheet(
+        workbook,
+        worksheet,
+        "Resultats"
+    );
+
+
+    // =====================================================
+    // FILE NAME
+    // =====================================================
+
+    const date =
+        new Date()
+            .toISOString()
+            .slice(0, 10);
+
+
+    const sourceName =
+        STATE.source.fileName
+            ? STATE.source.fileName
+                .replace(/\.[^/.]+$/, "")
+                .replace(
+                    /[^a-zA-Z0-9_-]/g,
+                    "_"
+                )
+            : "portfolio";
+
+
+    const fileName =
+        `conflagration_${sourceName}_${date}.xlsx`;
+
+
+    XLSX.writeFile(
+        workbook,
+        fileName
+    );
+
+}
 
     // =====================================================
 	// RESULTS TABLE
