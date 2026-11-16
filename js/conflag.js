@@ -192,6 +192,10 @@
 	function fullReset(){
 		
 		// A new portfolio invalidates previous results.
+		
+		STATE.data.initial = [];
+
+		STATE.selected.data = [];
 
 		resetResults();
 		renderTable();
