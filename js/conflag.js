@@ -867,6 +867,88 @@
 		return inside;
 
 	}
+
+	// =====================================================
+	// ADDRESS SEARCH
+	// =====================================================
+
+	async function searchLocation() {
+
+		const input =
+			document.querySelector("#mapSearch");
+
+
+		const button =
+			document.querySelector("#btnMapSearch");
+
+
+		if (!input) {
+			return;
+		}
+
+
+		const query =
+			input.value.trim();
+
+
+		if (!query) {
+			return;
+		}
+
+
+		try {
+
+			button.disabled = true;
+
+			button.textContent =
+				"Recherche...";
+
+
+			const result =
+				await Geocoder.search(
+					query,
+					{
+						country:
+							MAP_CONFIG.country
+					}
+				);
+
+
+			map.setView(
+				[
+					result.lat,
+					result.lon
+				],
+				14,
+				{
+					animate: true
+				}
+			);
+
+		}
+		catch (error) {
+
+			console.error(
+				"Geocoding error:",
+				error
+			);
+
+
+			updateAnalysisStatus(
+				error.message,
+				true
+			);
+
+		}
+		finally {
+
+			button.disabled = false;
+
+			button.textContent =
+				"Rechercher";
+		}
+	}
+
 	// =====================================================
 	// CLUSTER DISPLAY
 	// =====================================================
@@ -1314,6 +1396,19 @@
             exportRows
         );
 
+	// =====================================================
+	// SELECTED POLICIES SHEET
+	// =====================================================
+
+	const selectedPolicies =
+		STATE.selected.data;
+
+
+	const policiesWorksheet =
+		XLSX.utils.json_to_sheet(
+			selectedPolicies
+		);
+
 
     // Automatic-ish widths
 
@@ -1345,10 +1440,17 @@
 
 
     XLSX.utils.book_append_sheet(
-        workbook,
-        worksheet,
-        "Resultats"
-    );
+    workbook,
+    worksheet,
+    "Cercles"
+	);
+
+
+	XLSX.utils.book_append_sheet(
+		workbook,
+		policiesWorksheet,
+		"Polices"
+	);
 
 
     // =====================================================
@@ -1507,34 +1609,46 @@
 
 
 			row.addEventListener(
-			"click",
-			() => {
+				"click",
+				() => {
 
-				const lat =
-					Number(cluster.center_lat);
+					const lat =
+						Number(cluster.center_lat);
 
-				const lon =
-					Number(cluster.center_lon);
-
-
-				if (
-					!Number.isFinite(lat) ||
-					!Number.isFinite(lon)
-				) {
-					return;
-				}
+					const lon =
+						Number(cluster.center_lon);
 
 
-				map.setView(
-					[lat, lon],
-					16,
-					{
-						animate: true
+					if (
+						!Number.isFinite(lat) ||
+						!Number.isFinite(lon)
+					) {
+						return;
 					}
-				);
 
-			}
-		);
+
+					// Center map on cluster
+
+					map.setView(
+						[lat, lon],
+						16,
+						{
+							animate: true
+						}
+					);
+
+
+					// Scroll back to map
+
+					document
+						.querySelector(".conflag-map-panel")
+						?.scrollIntoView({
+							behavior: "smooth",
+							block: "start"
+						});
+
+				}
+			);
 
 			tbody.appendChild(row);
 
@@ -2258,19 +2372,42 @@
 			"click",
 			runAnalysis
 		);
-	 document
+	document
 		.querySelector("#btnReset")
 		?.addEventListener(
 			"click",
 			fullReset
 		);
 			
-		document
-		.querySelector("#btnExportResults")
-		?.addEventListener(
-			"click",
-			exportSelectedResults
-		);
+	document
+	.querySelector("#btnExportResults")
+	?.addEventListener(
+		"click",
+		exportSelectedResults
+	);
+	document
+    .querySelector("#btnMapSearch")
+    ?.addEventListener(
+        "click",
+        searchLocation
+    );
+
+	document
+    .querySelector("#mapSearch")
+    ?.addEventListener(
+        "keydown",
+        event => {
+
+            if (event.key === "Enter") {
+
+                event.preventDefault();
+
+                searchLocation();
+
+            }
+
+        }
+    );
 }
 
 
