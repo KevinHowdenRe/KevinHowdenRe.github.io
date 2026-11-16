@@ -1,98 +1,666 @@
 <div class="app">
-  <header class="header">
-    <a href="../index.html" class="header-brand">HAL</a>
-    <nav class="header-nav">
-      <a href="../index.html">Accueil</a><a href="../articles.html">Articles</a><a href="../documentation.html">Documentation</a><a href="../solutions.html" class="active">Solutions</a>
-      <a id="login_link" href="../login.html">Login</a>
-      <button onclick="switchLight()" id="interrupteur" class="theme-toggle" aria-label="Switch theme" type="button">☾</button>
-    </nav>
-  </header>
 
-  <main class="page">
-    <div class="page-header">
-      <div>
-        <span class="badge">Risque sécheresse</span>
-        <h1 class="page-title mt-4">Retrait-gonflement des argiles</h1>
-        <p class="page-description">Exploration territoriale de l'aléa RGA, du SWI et des reconnaissances CatNat.</p>
-      </div>
-      <div class="flex gap-2">
-        <button class="btn btn-secondary" type="button" onclick="document.location.href='../documentation/app.html#rga'">Documentation</button>
-        <button class="btn btn-secondary" type="button" id="btnReset">Réinitialiser</button>
-      </div>
-    </div>
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
 
-    <div class="conflag-toolbar">
-      <button id="btnToggleConfig" class="btn btn-secondary" type="button">☰ Configuration</button>
-    </div>
+    <header class="header">
 
-    <div id="rgaWorkspace" class="conflag-workspace">
-      <aside id="rgaConfig" class="card conflag-config">
-        <div class="card-header"><h2 class="card-title">Configuration</h2></div>
+        <a href="../index.html" class="header-brand">
+            HAL
+        </a>
 
-        <div class="form-group">
-          <label for="communeSearch">Commune</label>
-          <input id="communeSearch" type="search" placeholder="Rechercher une commune...">
-          <span class="form-help">Nom de commune ou code postal.</span>
+        <nav class="header-nav">
+
+            <a href="../index.html">Accueil</a>
+            <a href="../articles.html">Articles</a>
+            <a href="../documentation.html">Documentation</a>
+            <a href="../solutions.html" class="active">Solutions</a>
+
+            <a id="login_link" href="../login.html">
+                Login
+            </a>
+
+            <button
+                onclick="switchLight()"
+                id="interrupteur"
+                class="theme-toggle"
+                aria-label="Switch theme"
+                type="button">
+                ☾
+            </button>
+
+        </nav>
+
+    </header>
+
+
+    <!-- =====================================================
+         PAGE
+         ===================================================== -->
+
+    <main class="page">
+
+        <!-- PAGE HEADER -->
+
+        <div class="page-header">
+
+            <div>
+
+                <span class="badge">
+                    Risque sécheresse
+                </span>
+
+                <h1 class="page-title mt-4">
+                    Retrait-gonflement des argiles
+                </h1>
+
+                <p class="page-description">
+                    Exploration territoriale de l'aléa RGA,
+                    du SWI et des reconnaissances CatNat.
+                </p>
+
+            </div>
+
+
+            <div class="flex gap-2">
+
+                <button
+                    class="btn btn-secondary"
+                    type="button"
+                    onclick="document.location.href='../documentation/app.html#rga'">
+                    Documentation
+                </button>
+
+                <button
+                    class="btn btn-secondary"
+                    type="button"
+                    id="btnReset">
+                    Réinitialiser
+                </button>
+
+            </div>
+
         </div>
 
-        <div class="form-group">
-          <label for="analysisYear">Année d'analyse</label>
-          <select id="analysisYear">
-            <option value="2024" selected>2024</option><option value="2023">2023</option><option value="2022">2022</option>
-          </select>
+
+        <!-- =================================================
+             WORKSPACE TOOLBAR
+             ================================================= -->
+
+        <div class="conflag-toolbar">
+
+            <button
+                id="btnToggleConfig"
+                class="btn btn-secondary"
+                type="button">
+                ☰ Configuration
+            </button>
+
         </div>
 
-        <div class="form-group">
-          <label for="mainIndicator">Indicateur affiché</label>
-          <select id="mainIndicator">
-            <option value="rga" selected>Exposition RGA</option><option value="swi">SWI minimal</option><option value="catnat">Critère CatNat</option>
-          </select>
+
+        <!-- =================================================
+             WORKSPACE
+             ================================================= -->
+
+        <div id="rgaWorkspace" class="conflag-workspace">
+
+
+            <!-- =============================================
+                 CONFIGURATION
+                 ============================================= -->
+
+            <aside id="rgaConfig" class="card conflag-config">
+
+                <div class="card-header">
+
+                    <h2 class="card-title">
+                        Configuration
+                    </h2>
+
+                </div>
+
+
+                <!-- =========================================
+                     PORTFOLIO
+                     ========================================= -->
+
+                <div class="form-group">
+
+                    <label for="portfolio-file">
+                        Portefeuille
+                    </label>
+
+                    <input
+                        id="portfolio-file"
+                        type="file"
+                        accept=".csv,.xlsx,.xls">
+
+                    <span class="form-help">
+                        Optionnel. Portefeuille agrégé par commune.
+                    </span>
+
+                </div>
+
+
+                <div class="mt-4">
+
+                    <span
+                        id="fileStatus"
+                        class="badge">
+                        Aucun portefeuille chargé
+                    </span>
+
+                </div>
+
+
+                <hr class="divider">
+
+
+                <!-- =========================================
+                     ANALYSIS
+                     ========================================= -->
+
+                <div class="form-group">
+
+                    <label for="analysisYear">
+                        Année d'analyse
+                    </label>
+
+                    <select id="analysisYear">
+
+                        <option value="2024" selected>
+                            2024
+                        </option>
+
+                        <option value="2023">
+                            2023
+                        </option>
+
+                        <option value="2022">
+                            2022
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="mainIndicator">
+                        Indicateur affiché
+                    </label>
+
+                    <select id="mainIndicator">
+
+                        <option value="rga" selected>
+                            Exposition RGA
+                        </option>
+
+                        <option value="swi">
+                            SWI minimal
+                        </option>
+
+                        <option value="catnat">
+                            Critère CatNat
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <hr class="divider">
+
+
+                <!-- =========================================
+                     LAYERS
+                     ========================================= -->
+
+                <div class="form-group">
+
+                    <label>
+                        Couches
+                    </label>
+
+
+                    <label
+                        class="flex items-center justify-between gap-4 mt-4">
+
+                        <span>
+                            Communes
+                        </span>
+
+                        <input
+                            id="layerCommunes"
+                            type="checkbox"
+                            checked>
+
+                    </label>
+
+
+                    <label
+                        class="flex items-center justify-between gap-4 mt-4">
+
+                        <span>
+                            Départements
+                        </span>
+
+                        <input
+                            id="layerDepartments"
+                            type="checkbox"
+                            checked>
+
+                    </label>
+
+
+                    <label
+                        class="flex items-center justify-between gap-4 mt-4">
+
+                        <span>
+                            Aléa RGA
+                        </span>
+
+                        <input
+                            id="layerRga"
+                            type="checkbox"
+                            checked>
+
+                    </label>
+
+
+                    <label
+                        class="flex items-center justify-between gap-4 mt-4">
+
+                        <span>
+                            Mailles SWI
+                        </span>
+
+                        <input
+                            id="layerSwi"
+                            type="checkbox">
+
+                    </label>
+
+                </div>
+
+
+                <hr class="divider">
+
+
+                <!-- =========================================
+                     DATA INFORMATION
+                     ========================================= -->
+
+                <div>
+
+                    <span class="text-small text-secondary">
+                        Dernier calcul des indicateurs
+                    </span>
+
+                    <strong
+                        id="calculationDate"
+                        style="display:block; margin-top:.25rem;">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div class="mt-4">
+
+                    <span
+                        id="dataStatus"
+                        class="badge">
+                        Prototype
+                    </span>
+
+                </div>
+
+            </aside>
+
+
+            <!-- =============================================
+                 MAP
+                 ============================================= -->
+
+            <section class="card conflag-map-panel">
+
+
+                <!-- MAP HEADER -->
+
+                <div
+                    class="flex items-center justify-between gap-4 mb-4">
+
+                    <div>
+
+                        <h2 class="card-title">
+                            Carte
+                        </h2>
+
+                        <span class="text-small text-secondary">
+                            Sélectionnez une commune directement sur la carte
+                        </span>
+
+                    </div>
+
+
+                    <div class="flex items-center gap-2">
+
+                        <span
+                            id="selectedArea"
+                            class="badge">
+                            France
+                        </span>
+
+                        <span
+                            id="selectedYear"
+                            class="badge">
+                            2024
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================================
+                     MAP TOOLBAR
+                     Same structure as Conflagration
+                     ========================================= -->
+
+                <div class="flex gap-2 mb-4">
+
+                    <input
+                        id="mapSearch"
+                        type="search"
+                        placeholder="Rechercher une adresse ou une ville...">
+
+                    <button
+                        id="btnMapSearch"
+                        class="btn btn-secondary"
+                        type="button">
+                        Rechercher
+                    </button>
+
+                </div>
+
+
+                <!-- LEAFLET MAP -->
+
+                <div
+                    id="map"
+                    class="conflag-map">
+                </div>
+
+            </section>
+
         </div>
 
-        <hr class="divider">
-        <span class="text-small text-secondary">Couches</span>
-        <label class="flex items-center justify-between gap-4 mt-4"><span>Communes</span><input id="layerCommunes" type="checkbox" checked></label>
-        <label class="flex items-center justify-between gap-4 mt-4"><span>Départements</span><input id="layerDepartments" type="checkbox" checked></label>
-        <label class="flex items-center justify-between gap-4 mt-4"><span>Aléa RGA</span><input id="layerRga" type="checkbox" checked></label>
-        <label class="flex items-center justify-between gap-4 mt-4"><span>Mailles SWI</span><input id="layerSwi" type="checkbox"></label>
 
-        <hr class="divider">
-        <div><span class="text-small text-secondary">Dernier calcul</span><strong id="calculationDate" style="display:block;margin-top:.25rem">15/11/2026</strong></div>
-        <div class="mt-4"><span id="dataStatus" class="badge">Prototype</span></div>
-      </aside>
+        <!-- =================================================
+             SELECTED COMMUNE
+             ================================================= -->
 
-      <section class="card conflag-map-panel">
-        <div class="flex items-center justify-between gap-4 mb-4">
-          <div><h2 class="card-title">Carte</h2><span class="text-small text-secondary">Exploration du risque sécheresse en France métropolitaine</span></div>
-          <div class="flex items-center gap-2"><span id="selectedArea" class="badge">France</span><span id="selectedYear" class="badge">2024</span></div>
-        </div>
-        <div id="map" class="conflag-map"></div>
-      </section>
-    </div>
+        <section class="mt-6">
 
-    <section class="mt-6">
-      <div class="flex items-center justify-between gap-4 mb-4">
-        <div><h2 class="mb-0">Détail territorial</h2><p class="page-description">Sélectionnez une commune ou une maille sur la carte.</p></div>
-        <span class="badge">Données de démonstration</span>
-      </div>
 
-      <div class="card" id="territoryDetails">
-        <div class="card-header flex items-center justify-between gap-4">
-          <div><h3 class="card-title" id="detailCommune">Aucune commune sélectionnée</h3><span class="text-small text-secondary" id="detailLocation">Cliquez sur la carte pour afficher les informations.</span></div>
-        </div>
-        <div class="grid grid-cols-3 gap-4 mt-4">
-          <div><span class="text-small text-secondary">Exposition RGA</span><strong id="detailRga" style="display:block;margin-top:.25rem">—</strong></div>
-          <div><span class="text-small text-secondary">SWI minimum</span><strong id="detailSwi" style="display:block;margin-top:.25rem">—</strong></div>
-          <div><span class="text-small text-secondary">CatNat RGA</span><strong id="detailCatnat" style="display:block;margin-top:.25rem">—</strong></div>
-        </div>
-      </div>
-    </section>
-  </main>
+            <!-- SECTION HEADER -->
+
+            <div
+                class="flex items-center justify-between gap-4 mb-4">
+
+                <div>
+
+                    <h2 class="mb-0">
+                        Commune sélectionnée
+                    </h2>
+
+                    <p class="page-description">
+                        Informations générales et indicateurs de risque.
+                    </p>
+
+                </div>
+
+
+                <div class="flex items-center gap-2">
+
+                    <span
+                        id="portfolioMode"
+                        class="badge">
+                        Données générales
+                    </span>
+
+                    <button
+                        id="btnExportResults"
+                        class="btn btn-secondary"
+                        type="button"
+                        disabled>
+                        Télécharger Excel
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- =============================================
+                 TERRITORY DETAILS
+                 ============================================= -->
+
+            <div
+                class="card"
+                id="territoryDetails">
+
+
+                <!-- COMMUNE HEADER -->
+
+                <div class="card-header">
+
+                    <h3
+                        class="card-title"
+                        id="detailCommune">
+                        Aucune commune sélectionnée
+                    </h3>
+
+                    <span
+                        class="text-small text-secondary"
+                        id="detailLocation">
+                        Recherchez une adresse puis cliquez sur une commune.
+                    </span>
+
+                </div>
+
+
+                <!-- =========================================
+                     GENERAL INFORMATION
+                     ========================================= -->
+
+                <div class="grid grid-cols-3 gap-4 mt-4">
+
+
+                    <div>
+
+                        <span class="text-small text-secondary">
+                            Code INSEE
+                        </span>
+
+                        <strong
+                            id="detailInsee"
+                            style="display:block; margin-top:.25rem;">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span class="text-small text-secondary">
+                            Département
+                        </span>
+
+                        <strong
+                            id="detailDepartment"
+                            style="display:block; margin-top:.25rem;">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span class="text-small text-secondary">
+                            Exposition RGA
+                        </span>
+
+                        <strong
+                            id="detailRga"
+                            style="display:block; margin-top:.25rem;">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span class="text-small text-secondary">
+                            SWI minimum
+                        </span>
+
+                        <strong
+                            id="detailSwi"
+                            style="display:block; margin-top:.25rem;">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span class="text-small text-secondary">
+                            Rang historique SWI
+                        </span>
+
+                        <strong
+                            id="detailSwiRank"
+                            style="display:block; margin-top:.25rem;">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span class="text-small text-secondary">
+                            CatNat RGA
+                        </span>
+
+                        <strong
+                            id="detailCatnat"
+                            style="display:block; margin-top:.25rem;">
+                            —
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================================
+                     PORTFOLIO INFORMATION
+                     Hidden until a file is loaded
+                     ========================================= -->
+
+                <div
+                    id="portfolioDetails"
+                    class="mt-6"
+                    hidden>
+
+                    <hr class="divider">
+
+
+                    <h3 class="card-title">
+                        Portefeuille
+                    </h3>
+
+
+                    <div class="grid grid-cols-3 gap-4 mt-4">
+
+
+                        <div>
+
+                            <span class="text-small text-secondary">
+                                Somme assurée
+                            </span>
+
+                            <strong
+                                id="portfolioTsi"
+                                style="display:block; margin-top:.25rem;">
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <span class="text-small text-secondary">
+                                Nombre de risques
+                            </span>
+
+                            <strong
+                                id="portfolioRisks"
+                                style="display:block; margin-top:.25rem;">
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <span class="text-small text-secondary">
+                                Sinistralité estimée
+                            </span>
+
+                            <strong
+                                id="portfolioEstimatedLoss"
+                                style="display:block; margin-top:.25rem;">
+                                —
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
 </div>
 
+
+<!-- =====================================================
+     PAGE SCRIPTS
+     ===================================================== -->
+
 <div data-scripts="
-  ../js/base.js,
-  https://unpkg.com/leaflet@1.9.4/dist/leaflet.js,
-  ../js/geocoder.js,
-  ../js/rga.js
+    ../js/base.js,
+    https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js,
+    https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js,
+    ../js/fileLoader.js,
+    ../js/geocoder.js,
+    https://unpkg.com/leaflet@1.9.4/dist/leaflet.js,
+    ../js/rga.js
 "></div>
