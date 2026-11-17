@@ -244,7 +244,7 @@
 	}
 	
 	function setInitialData(data) {
-
+		fullReset();
 		STATE.data.initial =
 			data;
 
@@ -256,7 +256,7 @@
 			data.slice();
 
 
-		fullReset();
+		
 
 		updateAnalysisStatus(
 			`${data.length.toLocaleString("fr-FR")} polices chargées`
