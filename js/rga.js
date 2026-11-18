@@ -132,31 +132,24 @@
 
 
         map.addLayer({
-            id: "alea-rga-fill",
+			id: "alea-rga-fill",
+			type: "fill",
+			source: "alea-rga",
+			"source-layer": "alea_rga",
 
-            type: "fill",
+			paint: {
+				"fill-color": [
+					"match",
+					["get", "niveau"],
+					1, RGA_COLORS[1],
+					2, RGA_COLORS[2],
+					3, RGA_COLORS[3],
+					"rgba(0,0,0,0)"
+				],
 
-            source: "alea-rga",
-
-            "source-layer": "alea_rga",
-
-            paint: {
-
-                "fill-color": [
-                    "match",
-                    ["get", "niveau"],
-
-                    1, RGA_COLORS[1],
-                    2, RGA_COLORS[2],
-                    3, RGA_COLORS[3],
-
-                    "rgba(0,0,0,0)"
-                ],
-
-                "fill-opacity": 0.55
-            }
-        });
-
+				"fill-opacity": 0.55
+			}
+		});
 
         // Petit contour pour rendre les zones plus lisibles
 
@@ -203,7 +196,6 @@
             source: "communes",
 
             "source-layer": "communes",
-
             paint: {
 
                 "fill-color": [
