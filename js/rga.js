@@ -1,949 +1,557 @@
-/* =========================================================
-   RGA.JS
-   Prototype - carte RGA / SWI / CatNat
-
-   Pour le moment :
-   - Initialisation Leaflet
-   - Fond de carte
-   - Couches WMS
-   - Recherche géographique via geocoder.js
-   - Placeholders pour les futures fonctionnalités
-   ========================================================= */
-
-
-/* =========================================================
-   CONFIGURATION
-   ========================================================= */
-
-const MAP_CONFIG = {
-
-    center: [46.60, 2.50],
-    zoom: 6,
-
-    minZoom: 5,
-    maxZoom: 18
-
-};
-
-
-/* =========================================================
-   WMS SERVICES
-   ========================================================= */
-
-const WMS = {
-
-    // IGN / Géoplateforme
-    ignVector:
-        "https://data.geopf.fr/wms-v/wms?",
-
-    ignRaster:
-        "https://data.geopf.fr/wms-r/wms?",
-
-
-    // -----------------------------------------------------
-    // TODO
-    // Ajouter ici le service WMS RGA lorsqu'il est validé.
-    // -----------------------------------------------------
-
-    rga:
-        null,
-
-
-    // -----------------------------------------------------
-    // TODO
-    // Futur service contenant les mailles / résultats SWI.
-    // -----------------------------------------------------
-
-    swi:
-        null
-
-};
-
-
-/* =========================================================
-   MAP
-   ========================================================= */
-
-let map = null;
-
-
-/* =========================================================
-   LAYERS
-   ========================================================= */
-
-let communeLayer = null;
-
-let departmentLayer = null;
-
-let rgaLayer = null;
-
-let swiLayer = null;
-
-
-/* =========================================================
-   APPLICATION STATE
-   ========================================================= */
-
-let selectedCommune = null;
-
-let portfolioData = null;
-
-
-/* =========================================================
-   INIT MAP
-   ========================================================= */
-
-function initMap() {
-
-    map = L.map("map", {
-
-        center: MAP_CONFIG.center,
-        zoom: MAP_CONFIG.zoom,
-
-        minZoom: MAP_CONFIG.minZoom,
-        maxZoom: MAP_CONFIG.maxZoom
-
-    });
-
-
-    /* -----------------------------------------------------
-       BASE MAP
-
-       On garde OpenStreetMap comme dans Conflagration.
-       ----------------------------------------------------- */
-
-    L.tileLayer(
-        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-        {
-
-            maxZoom: 19,
-
-            attribution:
-                "&copy; OpenStreetMap contributors"
-
-        }
-    ).addTo(map);
-
-
-    /* -----------------------------------------------------
-       WMS LAYERS
-       ----------------------------------------------------- */
-
-    initWmsLayers();
-
-
-    /* -----------------------------------------------------
-       MAP EVENTS
-       ----------------------------------------------------- */
-
-    initMapEvents();
-
-}
-
-
-/* =========================================================
-   WMS LAYERS
-   ========================================================= */
-
-function initWmsLayers() {
-
-
-    /* -----------------------------------------------------
-       COMMUNES
-
-       TODO:
-       confirmer le nom exact de couche WMS Géoplateforme
-       avant activation.
-
-       Structure déjà prête.
-       ----------------------------------------------------- */
-
-    /*
-    communeLayer = L.tileLayer.wms(
-        WMS.ignVector,
-        {
-
-            layers:
-                "LIMITES_ADMINISTRATIVES_EXPRESS.LATEST:commune",
-
-            format:
-                "image/png",
-
-            transparent:
-                true,
-
-            opacity:
-                0.7
-
-        }
-    );
-
-    communeLayer.addTo(map);
-    */
-
-
-    /* -----------------------------------------------------
-       DEPARTEMENTS
-
-       Même principe.
-       ----------------------------------------------------- */
-
-    /*
-    departmentLayer = L.tileLayer.wms(
-        WMS.ignVector,
-        {
-
-            layers:
-                "LIMITES_ADMINISTRATIVES_EXPRESS.LATEST:departement",
-
-            format:
-                "image/png",
-
-            transparent:
-                true,
-
-            opacity:
-                0.8
-
-        }
-    );
-
-    departmentLayer.addTo(map);
-    */
-
-
-    /* -----------------------------------------------------
-       RGA
-       -----------------------------------------------------
-
-       Le branchement Leaflet est déjà prévu.
-
-       Une fois l'URL + le nom de couche WMS confirmés :
-
-       WMS.rga = "...";
-
-       puis décommenter ce bloc.
-       ----------------------------------------------------- */
-
-    /*
-    rgaLayer = L.tileLayer.wms(
-        WMS.rga,
-        {
-
-            layers:
-                "RGA_LAYER_NAME",
-
-            format:
-                "image/png",
-
-            transparent:
-                true,
-
-            opacity:
-                0.65
-
-        }
-    );
-
-    rgaLayer.addTo(map);
-    */
-
-
-    /* -----------------------------------------------------
-       SWI
-
-       Future couche issue de nos calculs.
-       ----------------------------------------------------- */
-
-    /*
-    swiLayer = L.tileLayer.wms(
-        WMS.swi,
-        {
-
-            layers:
-                "SWI",
-
-            format:
-                "image/png",
-
-            transparent:
-                true,
-
-            opacity:
-                0.65
-
-        }
-    );
-    */
-
-}
-
-
-/* =========================================================
-   MAP EVENTS
-   ========================================================= */
-
-function initMapEvents() {
-
-    map.on(
-        "click",
-        handleMapClick
-    );
-
-}
-
-
-/* =========================================================
-   MAP CLICK
-   ========================================================= */
-
-function handleMapClick(e) {
-
-    const latitude =
-        e.latlng.lat;
-
-    const longitude =
-        e.latlng.lng;
-
-
-    console.log(
-        "Map click:",
-        latitude,
-        longitude
-    );
-
-
-    /* -----------------------------------------------------
-       PLACEHOLDER
-
-       Plus tard :
-
-       1. identifier la commune correspondant au point
-       2. récupérer son code INSEE
-       3. charger les informations RGA
-       4. charger SWI
-       5. charger CatNat
-       6. afficher les informations
-
-       Pour l'instant on affiche simplement le point cliqué.
-       ----------------------------------------------------- */
-
-    showPlaceholderCommune(
-        latitude,
-        longitude
-    );
-
-}
-
-
-/* =========================================================
-   PLACEHOLDER COMMUNE
-   ========================================================= */
-
-function showPlaceholderCommune(
-    latitude,
-    longitude
-) {
-
-    selectedCommune = {
-
-        latitude:
-            latitude,
-
-        longitude:
-            longitude
-
+// ============================================================
+// RGA.JS
+// Version simple MapLibre + PMTiles
+// ============================================================
+
+(() => {
+    "use strict";
+
+    // ========================================================
+    // CONFIG
+    // ========================================================
+
+    const DATA_PATH = "/data/rga";
+
+    const DEFAULT_YEAR = 2026;
+
+    const ALEA_RGA_URL =
+        `${DATA_PATH}/alea_rga.pmtiles`;
+
+    function getCommunesUrl(year) {
+        return `${DATA_PATH}/communes_${year}.pmtiles`;
+    }
+
+
+    // ========================================================
+    // COULEURS
+    // ========================================================
+
+    // Résultats communaux
+    const COMMUNE_COLORS = {
+        CAS1: "#68191d",
+        CAS2: "#d9535a",
+        CAS3: "#f2a900",
+        NON:  "#f5f5df"
+    };
+
+    // Aléa BRGM
+    const RGA_COLORS = {
+        1: "#f1e68d",
+        2: "#d3691f",
+        3: "#a42b2a"
     };
 
 
-    setText(
-        "detailCommune",
-        "Commune sélectionnée"
+    // ========================================================
+    // PMTILES
+    // ========================================================
+
+    const protocol = new pmtiles.Protocol();
+
+    maplibregl.addProtocol(
+        "pmtiles",
+        protocol.tile
     );
 
 
-    setText(
-        "detailLocation",
-        `${latitude.toFixed(5)}, ${longitude.toFixed(5)}`
+    // ========================================================
+    // MAP
+    // ========================================================
+
+    const map = new maplibregl.Map({
+        container: "map",
+
+        center: [2.3, 46.6],
+        zoom: 5.5,
+
+        minZoom: 4,
+        maxZoom: 18,
+
+        style: {
+            version: 8,
+
+            sources: {
+                osm: {
+                    type: "raster",
+
+                    tiles: [
+                        "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    ],
+
+                    tileSize: 256,
+
+                    attribution:
+                        "© OpenStreetMap contributors"
+                }
+            },
+
+            layers: [
+                {
+                    id: "osm",
+                    type: "raster",
+                    source: "osm"
+                }
+            ]
+        }
+    });
+
+
+    map.addControl(
+        new maplibregl.NavigationControl(),
+        "top-right"
     );
 
 
-    setText(
-        "detailInsee",
-        "—"
-    );
+    // ========================================================
+    // CHARGEMENT DES COUCHES
+    // ========================================================
+
+    map.on("load", () => {
+
+        addRgaLayer();
+        addCommunesLayer(DEFAULT_YEAR);
+
+        bindInterface();
+
+        console.log("Carte RGA chargée");
+    });
 
 
-    setText(
-        "detailDepartment",
-        "—"
-    );
+    // ========================================================
+    // RGA BRGM
+    // ========================================================
+
+    function addRgaLayer() {
+
+        map.addSource("alea-rga", {
+            type: "vector",
+
+            url:
+                `pmtiles://${ALEA_RGA_URL}`
+        });
 
 
-    setText(
-        "detailRga",
-        "—"
-    );
+        map.addLayer({
+            id: "alea-rga-fill",
+
+            type: "fill",
+
+            source: "alea-rga",
+
+            "source-layer": "alea_rga",
+
+            paint: {
+
+                "fill-color": [
+                    "match",
+                    ["get", "niveau"],
+
+                    1, RGA_COLORS[1],
+                    2, RGA_COLORS[2],
+                    3, RGA_COLORS[3],
+
+                    "rgba(0,0,0,0)"
+                ],
+
+                "fill-opacity": 0.55
+            }
+        });
 
 
-    setText(
-        "detailSwi",
-        "—"
-    );
+        // Petit contour pour rendre les zones plus lisibles
 
+        map.addLayer({
+            id: "alea-rga-outline",
 
-    setText(
-        "detailSwiRank",
-        "—"
-    );
+            type: "line",
 
+            source: "alea-rga",
 
-    setText(
-        "detailCatnat",
-        "—"
-    );
+            "source-layer": "alea_rga",
 
-
-    enableExport();
-
-}
-
-
-/* =========================================================
-   LAYER CONTROLS
-   ========================================================= */
-
-function initLayerControls() {
-
-    bindLayerToggle(
-        "layerCommunes",
-        () => communeLayer
-    );
-
-
-    bindLayerToggle(
-        "layerDepartments",
-        () => departmentLayer
-    );
-
-
-    bindLayerToggle(
-        "layerRga",
-        () => rgaLayer
-    );
-
-
-    bindLayerToggle(
-        "layerSwi",
-        () => swiLayer
-    );
-
-}
-
-
-/* =========================================================
-   GENERIC LAYER TOGGLE
-   ========================================================= */
-
-function bindLayerToggle(
-    elementId,
-    getLayer
-) {
-
-    const checkbox =
-        document.getElementById(elementId);
-
-
-    if (!checkbox) {
-
-        return;
-
+            paint: {
+                "line-color": "rgba(80,80,80,0.25)",
+                "line-width": 0.5
+            }
+        });
     }
 
 
-    checkbox.addEventListener(
-        "change",
+    // ========================================================
+    // COMMUNES
+    // ========================================================
+
+    function addCommunesLayer(year) {
+
+        map.addSource("communes", {
+            type: "vector",
+
+            url:
+                `pmtiles://${getCommunesUrl(year)}`
+        });
+
+
+        // ----------------------------------------------------
+        // Remplissage
+        // ----------------------------------------------------
+
+        map.addLayer({
+            id: "communes-fill",
+
+            type: "fill",
+
+            source: "communes",
+
+            "source-layer": "communes",
+
+            paint: {
+
+                "fill-color": [
+                    "match",
+                    ["get", "raison_rga"],
+
+                    "CAS1", COMMUNE_COLORS.CAS1,
+                    "CAS2", COMMUNE_COLORS.CAS2,
+                    "CAS3", COMMUNE_COLORS.CAS3,
+                    "NON",  COMMUNE_COLORS.NON,
+
+                    "rgba(0,0,0,0)"
+                ],
+
+                "fill-opacity": 0.65
+            }
+        });
+
+
+        // ----------------------------------------------------
+        // Contours
+        // ----------------------------------------------------
+
+        map.addLayer({
+            id: "communes-outline",
+
+            type: "line",
+
+            source: "communes",
+
+            "source-layer": "communes",
+
+            paint: {
+                "line-color": "#555",
+                "line-width": [
+                    "interpolate",
+                    ["linear"],
+                    ["zoom"],
+
+                    5, 0.15,
+                    9, 0.4,
+                    12, 0.8
+                ],
+
+                "line-opacity": 0.7
+            }
+        });
+
+
+        // ----------------------------------------------------
+        // Surbrillance commune sélectionnée
+        // ----------------------------------------------------
+
+        map.addLayer({
+            id: "commune-selected",
+
+            type: "line",
+
+            source: "communes",
+
+            "source-layer": "communes",
+
+            filter: [
+                "==",
+                ["get", "code_insee"],
+                "__NONE__"
+            ],
+
+            paint: {
+                "line-color": "#000000",
+                "line-width": 3
+            }
+        });
+    }
+
+
+    // ========================================================
+    // CLIC COMMUNE
+    // ========================================================
+
+    map.on("click", "communes-fill", (event) => {
+
+        const feature = event.features?.[0];
+
+        if (!feature) {
+            return;
+        }
+
+        const p = feature.properties;
+
+        console.log(
+            "Commune sélectionnée :",
+            p
+        );
+
+
+        // ----------------------------------------------------
+        // Highlight
+        // ----------------------------------------------------
+
+        map.setFilter(
+            "commune-selected",
+            [
+                "==",
+                ["get", "code_insee"],
+                String(p.code_insee)
+            ]
+        );
+
+
+        // ----------------------------------------------------
+        // Interface actuelle
+        // ----------------------------------------------------
+
+        setText(
+            "detailCommune",
+            p.nom_officiel || "—"
+        );
+
+        setText(
+            "detailInsee",
+            p.code_insee || "—"
+        );
+
+        setText(
+            "detailIndicator",
+            p.indicateur ?? "—"
+        );
+
+        setText(
+            "detailRga",
+            p.raison_rga || "—"
+        );
+    });
+
+
+    // Curseur pointer
+
+    map.on(
+        "mouseenter",
+        "communes-fill",
         () => {
-
-            const layer =
-                getLayer();
-
-
-            /* Layer not implemented yet */
-
-            if (!layer) {
-
-                return;
-
-            }
-
-
-            if (checkbox.checked) {
-
-                layer.addTo(map);
-
-            }
-
-            else {
-
-                map.removeLayer(layer);
-
-            }
-
+            map.getCanvas().style.cursor =
+                "pointer";
         }
     );
 
-}
+
+    map.on(
+        "mouseleave",
+        "communes-fill",
+        () => {
+            map.getCanvas().style.cursor =
+                "";
+        }
+    );
 
 
-/* =========================================================
-   GEOCODER
-   ========================================================= */
+    // ========================================================
+    // INTERFACE
+    // ========================================================
 
-function initMapSearch() {
+    function bindInterface() {
 
-    const input =
-        document.getElementById(
-            "mapSearch"
-        );
+        // ----------------------------------------------------
+        // Communes
+        // ----------------------------------------------------
+
+        const layerCommunes =
+            document.getElementById(
+                "layerCommunes"
+            );
+
+        if (layerCommunes) {
+
+            layerCommunes.addEventListener(
+                "change",
+                () => {
+
+                    const visibility =
+                        layerCommunes.checked
+                            ? "visible"
+                            : "none";
+
+                    setLayerVisibility(
+                        "communes-fill",
+                        visibility
+                    );
+
+                    setLayerVisibility(
+                        "communes-outline",
+                        visibility
+                    );
+
+                    setLayerVisibility(
+                        "commune-selected",
+                        visibility
+                    );
+                }
+            );
+        }
 
 
-    const button =
-        document.getElementById(
-            "btnMapSearch"
-        );
+        // ----------------------------------------------------
+        // RGA
+        // ----------------------------------------------------
+
+        const layerRga =
+            document.getElementById(
+                "layerRga"
+            );
+
+        if (layerRga) {
+
+            layerRga.addEventListener(
+                "change",
+                () => {
+
+                    const visibility =
+                        layerRga.checked
+                            ? "visible"
+                            : "none";
+
+                    setLayerVisibility(
+                        "alea-rga-fill",
+                        visibility
+                    );
+
+                    setLayerVisibility(
+                        "alea-rga-outline",
+                        visibility
+                    );
+                }
+            );
+        }
 
 
-    if (
-        !input ||
-        !button
+        // ----------------------------------------------------
+        // SWI
+        // PLACEHOLDER
+        // ----------------------------------------------------
+
+        const layerSwi =
+            document.getElementById(
+                "layerSwi"
+            );
+
+        if (layerSwi) {
+
+            layerSwi.addEventListener(
+                "change",
+                () => {
+
+                    console.log(
+                        "SWI : placeholder"
+                    );
+                }
+            );
+        }
+
+
+        // ----------------------------------------------------
+        // Recherche
+        // PLACEHOLDER pour l'instant
+        // ----------------------------------------------------
+
+        const searchInput =
+            document.getElementById(
+                "mapSearchInput"
+            );
+
+        if (searchInput) {
+
+            searchInput.addEventListener(
+                "keydown",
+                event => {
+
+                    if (event.key !== "Enter") {
+                        return;
+                    }
+
+                    console.log(
+                        "Recherche :",
+                        searchInput.value
+                    );
+                }
+            );
+        }
+    }
+
+
+    // ========================================================
+    // HELPERS
+    // ========================================================
+
+    function setLayerVisibility(
+        layerId,
+        visibility
     ) {
 
-        return;
-
-    }
-
-
-    button.addEventListener(
-        "click",
-        () => {
-
-            runMapSearch(
-                input.value
-            );
-
+        if (!map.getLayer(layerId)) {
+            return;
         }
-    );
+
+        map.setLayoutProperty(
+            layerId,
+            "visibility",
+            visibility
+        );
+    }
 
 
-    input.addEventListener(
-        "keydown",
-        e => {
+    function setText(id, value) {
 
-            if (
-                e.key === "Enter"
-            ) {
+        const element =
+            document.getElementById(id);
 
-                e.preventDefault();
-
-                runMapSearch(
-                    input.value
-                );
-
-            }
-
+        if (!element) {
+            return;
         }
-    );
-
-}
-
-
-/* =========================================================
-   RUN MAP SEARCH
-   ========================================================= */
-
-async function runMapSearch(query) {
-
-    query =
-        query.trim();
-
-
-    if (!query) {
-
-        return;
-
-    }
-
-
-    /* -----------------------------------------------------
-
-       PLACEHOLDER CONNECTION TO geocoder.js
-
-       Ici on branchera EXACTEMENT la même fonction que dans
-       Conflagration.
-
-       Exemple :
-
-       const result =
-           await geocode(query);
-
-       map.setView(
-           [
-               result.latitude,
-               result.longitude
-           ],
-           14
-       );
-
-       ----------------------------------------------------- */
-
-
-    console.log(
-        "Geocoder search:",
-        query
-    );
-
-}
-
-
-/* =========================================================
-   PORTFOLIO
-   ========================================================= */
-
-function initPortfolioImport() {
-
-    const input =
-        document.getElementById(
-            "portfolio-file"
-        );
-
-
-    if (!input) {
-
-        return;
-
-    }
-
-
-    input.addEventListener(
-        "change",
-        handlePortfolioFile
-    );
-
-}
-
-
-/* =========================================================
-   PORTFOLIO PLACEHOLDER
-   ========================================================= */
-
-function handlePortfolioFile(event) {
-
-    const file =
-        event.target.files[0];
-
-
-    if (!file) {
-
-        return;
-
-    }
-
-
-    /* -----------------------------------------------------
-
-       TODO
-
-       Ici on branchera fileLoader.js.
-
-       Le fichier devra ensuite être rattaché aux communes
-       par code INSEE.
-
-       ----------------------------------------------------- */
-
-
-    portfolioData = null;
-
-
-    setText(
-        "fileStatus",
-        file.name
-    );
-
-
-    setText(
-        "portfolioMode",
-        "Mode portefeuille"
-    );
-
-
-    console.log(
-        "Portfolio:",
-        file
-    );
-
-}
-
-
-/* =========================================================
-   YEAR
-   ========================================================= */
-
-function initYearSelector() {
-
-    const select =
-        document.getElementById(
-            "analysisYear"
-        );
-
-
-    if (!select) {
-
-        return;
-
-    }
-
-
-    select.addEventListener(
-        "change",
-        () => {
-
-            setText(
-                "selectedYear",
-                select.value
-            );
-
-
-            /* TODO:
-               actualiser couche SWI
-               + informations commune
-            */
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   EXPORT
-   ========================================================= */
-
-function enableExport() {
-
-    const button =
-        document.getElementById(
-            "btnExportResults"
-        );
-
-
-    if (button) {
-
-        button.disabled =
-            false;
-
-    }
-
-}
-
-
-/* =========================================================
-   RESET
-   ========================================================= */
-
-function initReset() {
-
-    const button =
-        document.getElementById(
-            "btnReset"
-        );
-
-
-    if (!button) {
-
-        return;
-
-    }
-
-
-    button.addEventListener(
-        "click",
-        fullReset
-    );
-
-}
-
-
-/* =========================================================
-   FULL RESET
-   ========================================================= */
-
-function fullReset() {
-
-    selectedCommune =
-        null;
-
-
-    portfolioData =
-        null;
-
-
-    map.setView(
-        MAP_CONFIG.center,
-        MAP_CONFIG.zoom
-    );
-
-
-    setText(
-        "detailCommune",
-        "Aucune commune sélectionnée"
-    );
-
-
-    setText(
-        "detailLocation",
-        "Recherchez une adresse puis cliquez sur une commune."
-    );
-
-
-    setText(
-        "detailInsee",
-        "—"
-    );
-
-
-    setText(
-        "detailDepartment",
-        "—"
-    );
-
-
-    setText(
-        "detailRga",
-        "—"
-    );
-
-
-    setText(
-        "detailSwi",
-        "—"
-    );
-
-
-    setText(
-        "detailSwiRank",
-        "—"
-    );
-
-
-    setText(
-        "detailCatnat",
-        "—"
-    );
-
-
-    setText(
-        "fileStatus",
-        "Aucun portefeuille chargé"
-    );
-
-
-    setText(
-        "portfolioMode",
-        "Données générales"
-    );
-
-
-    const portfolioInput =
-        document.getElementById(
-            "portfolio-file"
-        );
-
-
-    if (portfolioInput) {
-
-        portfolioInput.value =
-            "";
-
-    }
-
-
-    const portfolioDetails =
-        document.getElementById(
-            "portfolioDetails"
-        );
-
-
-    if (portfolioDetails) {
-
-        portfolioDetails.hidden =
-            true;
-
-    }
-
-
-    const exportButton =
-        document.getElementById(
-            "btnExportResults"
-        );
-
-
-    if (exportButton) {
-
-        exportButton.disabled =
-            true;
-
-    }
-
-}
-
-
-/* =========================================================
-   HELPERS
-   ========================================================= */
-
-function setText(
-    id,
-    value
-) {
-
-    const element =
-        document.getElementById(id);
-
-
-    if (element) {
 
         element.textContent =
-            value;
-
+            value ?? "—";
     }
 
-}
+
+    // ========================================================
+    // PLACEHOLDERS
+    // ========================================================
+
+    function loadPortfolio() {
+        console.log(
+            "Portfolio : placeholder"
+        );
+    }
 
 
-/* =========================================================
-   INITIALIZE APPLICATION
-   ========================================================= */
-
-function initRgaApp() {
-
-    initMap();
-
-    initLayerControls();
-
-    initMapSearch();
-
-    initPortfolioImport();
-
-    initYearSelector();
-
-    initReset();
-
-}
+    function resetPortfolio() {
+        console.log(
+            "Reset : placeholder"
+        );
+    }
 
 
-/* =========================================================
-   START
-   ========================================================= */
+    function exportResults() {
+        console.log(
+            "Export : placeholder"
+        );
+    }
 
-initRgaApp();
+})();
