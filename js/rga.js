@@ -123,51 +123,22 @@
 
     function addRgaLayer() {
 
-        map.addSource("alea-rga", {
-            type: "vector",
-
-            url:
-                `pmtiles://${ALEA_RGA_URL}`
-        });
-
-
-        map.addLayer({
-			id: "alea-rga-fill",
-			type: "fill",
-			source: "alea-rga",
-			"source-layer": "alea_rga",
-
-			paint: {
-				"fill-color": [
-					"match",
-					["get", "niveau"],
-					1, RGA_COLORS[1],
-					2, RGA_COLORS[2],
-					3, RGA_COLORS[3],
-					"rgba(0,0,0,0)"
-				],
-
-				"fill-opacity": 0.55
-			}
+		map.addSource("alea-rga", {
+			type: "raster",
+			url: `pmtiles://${ALEA_RGA_URL}`,
+			tileSize: 512
 		});
 
-        // Petit contour pour rendre les zones plus lisibles
+		map.addLayer({
+			id: "alea-rga",
+			type: "raster",
+			source: "alea-rga",
 
-        map.addLayer({
-            id: "alea-rga-outline",
-
-            type: "line",
-
-            source: "alea-rga",
-
-            "source-layer": "alea_rga",
-
-            paint: {
-                "line-color": "rgba(80,80,80,0.25)",
-                "line-width": 0.5
-            }
-        });
-    }
+			paint: {
+				"raster-opacity": 0.75
+			}
+		});
+	}
 
 
     // ========================================================
