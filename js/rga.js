@@ -12,14 +12,16 @@
 
     const DATA_PATH = "/data/rga";
 
-    const DEFAULT_YEAR = 2026;
+	const ALEA_RGA_URL =
+		`${DATA_PATH}/alea_rga.pmtiles`;
 
-    const ALEA_RGA_URL =
-        `${DATA_PATH}/alea_rga.pmtiles`;
+	function getCommunesUrl(year) {
+		return `${DATA_PATH}/communes_${year}.pmtiles`;
+	}
 
-    function getCommunesUrl(year) {
-        return `${DATA_PATH}/communes_${year}.pmtiles`;
-    }
+	function getCommunesOverviewUrl(year) {
+		return `${DATA_PATH}/communes_${year}_overview.pmtiles`;
+	}
 
 
     // ========================================================
@@ -140,107 +142,143 @@
 		});
 	}
 
-
     // ========================================================
     // COMMUNES
     // ========================================================
 
     function addCommunesLayer(year) {
 
-        map.addSource("communes", {
-            type: "vector",
+    // ========================================================
+    // 1. OVERVIEW RASTER
+    // Vue France entière - zoom faible
+    // ========================================================
 
-            url:
-                `pmtiles://${getCommunesUrl(year)}`
-        });
+    map.addSource("communes-overview", {
+        type: "raster",
+        url: `pmtiles://${getCommunesOverviewUrl(year)}`,
+        tileSize: 512
+    });
 
+    map.addLayer({
+        id: "communes-overview",
+        type: "raster",
+        source: "communes-overview",
 
-        // ----------------------------------------------------
-        // Remplissage
-        // ----------------------------------------------------
+        // Petit chevauchement avec la couche vectorielle
+        maxzoom: 8.5,
 
-        map.addLayer({
-            id: "communes-fill",
-
-            type: "fill",
-
-            source: "communes",
-
-            "source-layer": "communes",
-            paint: {
-
-                "fill-color": [
-                    "match",
-                    ["get", "raison_rga"],
-
-                    "CAS1", COMMUNE_COLORS.CAS1,
-                    "CAS2", COMMUNE_COLORS.CAS2,
-                    "CAS3", COMMUNE_COLORS.CAS3,
-                    "NON",  COMMUNE_COLORS.NON,
-
-                    "rgba(0,0,0,0)"
-                ],
-
-                "fill-opacity": 0.65
-            }
-        });
+        paint: {
+            "raster-opacity": 0.65
+        }
+    });
 
 
-        // ----------------------------------------------------
-        // Contours
-        // ----------------------------------------------------
+    // ========================================================
+    // 2. COMMUNES VECTORIELLES
+    // Détail + interaction - zoom >= 8
+    // ========================================================
 
-        map.addLayer({
-            id: "communes-outline",
-
-            type: "line",
-
-            source: "communes",
-
-            "source-layer": "communes",
-
-            paint: {
-                "line-color": "#555",
-                "line-width": [
-                    "interpolate",
-                    ["linear"],
-                    ["zoom"],
-
-                    5, 0.15,
-                    9, 0.4,
-                    12, 0.8
-                ],
-
-                "line-opacity": 0.7
-            }
-        });
+    map.addSource("communes", {
+        type: "vector",
+        url: `pmtiles://${getCommunesUrl(year)}`
+    });
 
 
-        // ----------------------------------------------------
-        // Surbrillance commune sélectionnée
-        // ----------------------------------------------------
+    // --------------------------------------------------------
+    // Remplissage
+    // --------------------------------------------------------
 
-        map.addLayer({
-            id: "commune-selected",
+    map.addLayer({
+        id: "communes-fill",
 
-            type: "line",
+        type: "fill",
 
-            source: "communes",
+        source: "communes",
 
-            "source-layer": "communes",
+        "source-layer": "communes",
 
-            filter: [
-                "==",
-                ["get", "code_insee"],
-                "__NONE__"
+        minzoom: 8,
+
+        paint: {
+
+            "fill-color": [
+                "match",
+                ["get", "raison_rga"],
+
+                "CAS1", COMMUNE_COLORS.CAS1,
+                "CAS2", COMMUNE_COLORS.CAS2,
+                "CAS3", COMMUNE_COLORS.CAS3,
+                "NON",  COMMUNE_COLORS.NON,
+
+                "rgba(0,0,0,0)"
             ],
 
-            paint: {
-                "line-color": "#000000",
-                "line-width": 3
-            }
-        });
-    }
+            "fill-opacity": 0.65
+        }
+    });
+
+
+    // --------------------------------------------------------
+    // Contours
+    // --------------------------------------------------------
+
+    map.addLayer({
+        id: "communes-outline",
+
+        type: "line",
+
+        source: "communes",
+
+        "source-layer": "communes",
+
+        minzoom: 8,
+
+        paint: {
+
+            "line-color": "#555",
+
+            "line-width": [
+                "interpolate",
+                ["linear"],
+                ["zoom"],
+
+                8, 0.2,
+                10, 0.5,
+                12, 0.8
+            ],
+
+            "line-opacity": 0.7
+        }
+    });
+
+
+    // --------------------------------------------------------
+    // Surbrillance commune sélectionnée
+    // --------------------------------------------------------
+
+    map.addLayer({
+        id: "commune-selected",
+
+        type: "line",
+
+        source: "communes",
+
+        "source-layer": "communes",
+
+        minzoom: 8,
+
+        filter: [
+            "==",
+            ["get", "code_insee"],
+            "__NONE__"
+        ],
+
+        paint: {
+            "line-color": "#000000",
+            "line-width": 3
+        }
+    });
+}
 
 
     // ========================================================
@@ -360,6 +398,10 @@
                         "communes-outline",
                         visibility
                     );
+					setLayerVisibility(
+						"communes-overview",
+						visibility
+					);
 
                     setLayerVisibility(
                         "commune-selected",
@@ -390,15 +432,10 @@
                             ? "visible"
                             : "none";
 
-                    setLayerVisibility(
-                        "alea-rga-fill",
-                        visibility
-                    );
-
-                    setLayerVisibility(
-                        "alea-rga-outline",
-                        visibility
-                    );
+					setLayerVisibility(
+						"alea-rga",
+						visibility
+					);
                 }
             );
         }
