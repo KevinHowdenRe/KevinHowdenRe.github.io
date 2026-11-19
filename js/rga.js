@@ -5,11 +5,11 @@
 
 (() => {
     "use strict";
-
+	const year = 2026;
     // ========================================================
     // CONFIG
     // ========================================================
-
+	
     const DATA_PATH = "/data/rga";
 
 	const ALEA_RGA_URL =
@@ -111,7 +111,7 @@
     map.on("load", () => {
 
         addRgaLayer();
-        addCommunesLayer(DEFAULT_YEAR);
+        addCommunesLayer(year);
 
         bindInterface();
 
